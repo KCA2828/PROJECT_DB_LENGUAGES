@@ -94,102 +94,579 @@ CREATE TABLE EMPLEADO (
     CONSTRAINT FK_EMPLEADO_DEPARTAMENTO FOREIGN KEY (ID_DEPARTAMENTO) REFERENCES DEPARTAMENTO(ID_DEPARTAMENTO)
 );
 
--- Procedimientos almacenados
-SET SERVEROUTPUT ON;
+
+
 
 -- Procedimientos almacenados
-CREATE OR REPLACE PROCEDURE CONSULTAR_INGREDIENTES(
-    p_nombre_ingrediente IN VARCHAR2
+
+-- TABLA PROVEEDORES
+CREATE OR REPLACE PROCEDURE CREAR_PROVEEDOR(
+    p_id_proveedor IN NUMBER,
+    p_nombre IN VARCHAR2,
+    p_direccion IN VARCHAR2,
+    p_correo IN VARCHAR2,
+    p_telefono IN VARCHAR2
 )
+AS
+BEGIN
+    INSERT INTO PROVEEDOR (ID_PROVEEDOR, NOMBRE, DIRECCION, CORREO, TELEFONO)
+    VALUES (p_id_proveedor, p_nombre, p_direccion, p_correo, p_telefono);
+    COMMIT;
+END CREAR_PROVEEDOR;
+/
+
+CREATE OR REPLACE PROCEDURE ACTUALIZAR_PROVEEDOR(
+    p_id_proveedor IN NUMBER,
+    p_nombre IN VARCHAR2,
+    p_direccion IN VARCHAR2,
+    p_correo IN VARCHAR2,
+    p_telefono IN VARCHAR2
+)
+AS
+BEGIN
+    UPDATE PROVEEDOR
+    SET NOMBRE = p_nombre,
+        DIRECCION = p_direccion,
+        CORREO = p_correo,
+        TELEFONO = p_telefono
+    WHERE ID_PROVEEDOR = p_id_proveedor;
+    COMMIT;
+END ACTUALIZAR_PROVEEDOR;
+/
+
+CREATE OR REPLACE PROCEDURE ELIMINAR_PROVEEDOR(
+    p_id_proveedor IN NUMBER
+)
+AS
+BEGIN
+    DELETE FROM PROVEEDOR
+    WHERE ID_PROVEEDOR = p_id_proveedor;
+    COMMIT;
+END ELIMINAR_PROVEEDOR;
+/
+
+-- TABLA CLIENTES
+CREATE OR REPLACE PROCEDURE CREAR_CLIENTE(
+    p_id_cliente IN NUMBER,
+    p_nombre IN VARCHAR2,
+    p_apellido IN VARCHAR2,
+    p_direccion IN VARCHAR2,
+    p_correo IN VARCHAR2,
+    p_telefono IN VARCHAR2
+)
+AS
+BEGIN
+    INSERT INTO CLIENTE (ID_CLIENTE, NOMBRE, APELLIDO, DIRECCION, CORREO, TELEFONO)
+    VALUES (p_id_cliente, p_nombre, p_apellido, p_direccion, p_correo, p_telefono);
+    COMMIT;
+END CREAR_CLIENTE;
+/
+
+CREATE OR REPLACE PROCEDURE ACTUALIZAR_CLIENTE(
+    p_id_cliente IN NUMBER,
+    p_nombre IN VARCHAR2,
+    p_apellido IN VARCHAR2,
+    p_direccion IN VARCHAR2,
+    p_correo IN VARCHAR2,
+    p_telefono IN VARCHAR2
+)
+AS
+BEGIN
+    UPDATE CLIENTE
+    SET NOMBRE = p_nombre,
+        APELLIDO = p_apellido,
+        DIRECCION = p_direccion,
+        CORREO = p_correo,
+        TELEFONO = p_telefono
+    WHERE ID_CLIENTE = p_id_cliente;
+    COMMIT;
+END ACTUALIZAR_CLIENTE;
+/
+
+CREATE OR REPLACE PROCEDURE ELIMINAR_CLIENTE(
+    p_id_cliente IN NUMBER
+)
+AS
+BEGIN
+    DELETE FROM CLIENTE
+    WHERE ID_CLIENTE = p_id_cliente;
+    COMMIT;
+END ELIMINAR_CLIENTE;
+/
+
+-- TABLA DEPARTAMENTO
+
+-- Procedimiento para crear un departamento
+CREATE OR REPLACE PROCEDURE CREAR_DEPARTAMENTO(
+    p_id_departamento IN NUMBER,
+    p_nombre IN VARCHAR2
+)
+AS
+BEGIN
+    INSERT INTO DEPARTAMENTO (ID_DEPARTAMENTO, NOMBRE)
+    VALUES (p_id_departamento, p_nombre);
+    COMMIT;
+END CREAR_DEPARTAMENTO;
+/
+
+-- Procedimiento para actualizar un departamento
+CREATE OR REPLACE PROCEDURE ACTUALIZAR_DEPARTAMENTO(
+    p_id_departamento IN NUMBER,
+    p_nombre IN VARCHAR2
+)
+AS
+BEGIN
+    UPDATE DEPARTAMENTO
+    SET NOMBRE = p_nombre
+    WHERE ID_DEPARTAMENTO = p_id_departamento;
+    COMMIT;
+END ACTUALIZAR_DEPARTAMENTO;
+/
+
+-- Procedimiento para eliminar un departamento
+CREATE OR REPLACE PROCEDURE ELIMINAR_DEPARTAMENTO(
+    p_id_departamento IN NUMBER
+)
+AS
+BEGIN
+    DELETE FROM DEPARTAMENTO
+    WHERE ID_DEPARTAMENTO = p_id_departamento;
+    COMMIT;
+END ELIMINAR_DEPARTAMENTO;
+/
+
+-- TABLA PRODUCTO
+
+-- Procedimiento para crear un producto
+CREATE OR REPLACE PROCEDURE CREAR_PRODUCTO(
+    p_id_producto IN NUMBER,
+    p_nombre IN VARCHAR2,
+    p_precio IN NUMBER,
+    p_cantidad IN NUMBER,
+    p_fecha_vencimiento IN DATE
+)
+AS
+BEGIN
+    INSERT INTO PRODUCTO (ID_PRODUCTO, NOMBRE, PRECIO, CANTIDAD, FECHA_VENCIMIENTO)
+    VALUES (p_id_producto, p_nombre, p_precio, p_cantidad, p_fecha_vencimiento);
+    COMMIT;
+END CREAR_PRODUCTO;
+/
+
+-- Procedimiento para actualizar un producto
+CREATE OR REPLACE PROCEDURE ACTUALIZAR_PRODUCTO(
+    p_id_producto IN NUMBER,
+    p_nombre IN VARCHAR2,
+    p_precio IN NUMBER,
+    p_cantidad IN NUMBER,
+    p_fecha_vencimiento IN DATE
+)
+AS
+BEGIN
+    UPDATE PRODUCTO
+    SET NOMBRE = p_nombre,
+        PRECIO = p_precio,
+        CANTIDAD = p_cantidad,
+        FECHA_VENCIMIENTO = p_fecha_vencimiento
+    WHERE ID_PRODUCTO = p_id_producto;
+    COMMIT;
+END ACTUALIZAR_PRODUCTO;
+/
+
+-- Procedimiento para eliminar un producto
+CREATE OR REPLACE PROCEDURE ELIMINAR_PRODUCTO(
+    p_id_producto IN NUMBER
+)
+AS
+BEGIN
+    DELETE FROM PRODUCTO
+    WHERE ID_PRODUCTO = p_id_producto;
+    COMMIT;
+END ELIMINAR_PRODUCTO;
+/
+
+-- TABLA COMPRA 
+
+-- Procedimiento para crear una compra
+CREATE OR REPLACE PROCEDURE CREAR_COMPRA(
+    p_id_compra IN NUMBER,
+    p_fecha IN DATE,
+    p_ganancia IN NUMBER,
+    p_id_cliente IN NUMBER,
+    p_id_producto IN NUMBER
+)
+AS
+BEGIN
+    INSERT INTO COMPRA (ID_COMPRA, FECHA, GANANCIA, ID_CLIENTE, ID_PRODUCTO)
+    VALUES (p_id_compra, p_fecha, p_ganancia, p_id_cliente, p_id_producto);
+    COMMIT;
+END CREAR_COMPRA;
+/
+
+-- Procedimiento para actualizar una compra (Nota: Normalmente no se actualizan las compras)
+CREATE OR REPLACE PROCEDURE ACTUALIZAR_COMPRA(
+    p_id_compra IN NUMBER,
+    p_fecha IN DATE,
+    p_ganancia IN NUMBER,
+    p_id_cliente IN NUMBER,
+    p_id_producto IN NUMBER
+)
+AS
+BEGIN
+    UPDATE COMPRA
+    SET FECHA = p_fecha,
+        GANANCIA = p_ganancia,
+        ID_CLIENTE = p_id_cliente,
+        ID_PRODUCTO = p_id_producto
+    WHERE ID_COMPRA = p_id_compra;
+    COMMIT;
+END ACTUALIZAR_COMPRA;
+/
+
+-- Procedimiento para eliminar una compra
+CREATE OR REPLACE PROCEDURE ELIMINAR_COMPRA(
+    p_id_compra IN NUMBER
+)
+AS
+BEGIN
+    DELETE FROM COMPRA
+    WHERE ID_COMPRA = p_id_compra;
+    COMMIT;
+END ELIMINAR_COMPRA;
+/
+
+-- TABLA INGREDIENTE
+
+-- Procedimiento para crear un ingrediente
+CREATE OR REPLACE PROCEDURE CREAR_INGREDIENTE(
+    p_id_ingrediente IN NUMBER,
+    p_nombre IN VARCHAR2,
+    p_cantidad IN NUMBER,
+    p_precio_unitario IN NUMBER,
+    p_id_proveedor IN NUMBER
+)
+AS
+BEGIN
+    INSERT INTO INGREDIENTE (ID_INGREDIENTE, NOMBRE, CANTIDAD, PRECIO_UNITARIO, ID_PROVEEDOR)
+    VALUES (p_id_ingrediente, p_nombre, p_cantidad, p_precio_unitario, p_id_proveedor);
+    COMMIT;
+END CREAR_INGREDIENTE;
+/
+
+-- Procedimiento para actualizar un ingrediente
+CREATE OR REPLACE PROCEDURE ACTUALIZAR_INGREDIENTE(
+    p_id_ingrediente IN NUMBER,
+    p_nombre IN VARCHAR2,
+    p_cantidad IN NUMBER,
+    p_precio_unitario IN NUMBER,
+    p_id_proveedor IN NUMBER
+)
+AS
+BEGIN
+    UPDATE INGREDIENTE
+    SET NOMBRE = p_nombre,
+        CANTIDAD = p_cantidad,
+        PRECIO_UNITARIO = p_precio_unitario,
+        ID_PROVEEDOR = p_id_proveedor
+    WHERE ID_INGREDIENTE = p_id_ingrediente;
+    COMMIT;
+END ACTUALIZAR_INGREDIENTE;
+/
+
+-- Procedimiento para eliminar un ingrediente
+CREATE OR REPLACE PROCEDURE ELIMINAR_INGREDIENTE(
+    p_id_ingrediente IN NUMBER
+)
+AS
+BEGIN
+    DELETE FROM INGREDIENTE
+    WHERE ID_INGREDIENTE = p_id_ingrediente;
+    COMMIT;
+END ELIMINAR_INGREDIENTE;
+/
+
+-- TABLA RECETA
+
+-- Procedimiento para crear una receta
+CREATE OR REPLACE PROCEDURE CREAR_RECETA(
+    p_id_receta IN NUMBER,
+    p_nombre_receta IN VARCHAR2
+)
+AS
+BEGIN
+    INSERT INTO RECETA (ID_RECETA, NOMBRE_RECETA)
+    VALUES (p_id_receta, p_nombre_receta);
+    COMMIT;
+END CREAR_RECETA;
+/
+
+-- Procedimiento para actualizar una receta
+CREATE OR REPLACE PROCEDURE ACTUALIZAR_RECETA(
+    p_id_receta IN NUMBER,
+    p_nombre_receta IN VARCHAR2
+)
+AS
+BEGIN
+    UPDATE RECETA
+    SET NOMBRE_RECETA = p_nombre_receta
+    WHERE ID_RECETA = p_id_receta;
+    COMMIT;
+END ACTUALIZAR_RECETA;
+/
+
+-- Procedimiento para eliminar una receta
+CREATE OR REPLACE PROCEDURE ELIMINAR_RECETA(
+    p_id_receta IN NUMBER
+)
+AS
+BEGIN
+    DELETE FROM RECETA
+    WHERE ID_RECETA = p_id_receta;
+    COMMIT;
+END ELIMINAR_RECETA;
+/
+
+-- TABLA INGREDIENTE_RECETA
+
+-- Procedimiento para crear una relación entre ingrediente y receta
+CREATE OR REPLACE PROCEDURE CREAR_INGREDIENTE_RECETA(
+    p_id_receta IN NUMBER,
+    p_id_ingrediente IN NUMBER,
+    p_cantidad IN NUMBER
+)
+AS
+BEGIN
+    INSERT INTO INGREDIENTE_RECETA (ID_RECETA, ID_INGREDIENTE, CANTIDAD)
+    VALUES (p_id_receta, p_id_ingrediente, p_cantidad);
+    COMMIT;
+END CREAR_INGREDIENTE_RECETA;
+/
+
+-- Procedimiento para actualizar la cantidad de un ingrediente en una receta (Nota: Normalmente no se actualiza esta información)
+CREATE OR REPLACE PROCEDURE ACTUALIZAR_INGREDIENTE_RECETA(
+    p_id_receta IN NUMBER,
+    p_id_ingrediente IN NUMBER,
+    p_cantidad IN NUMBER
+)
+AS
+BEGIN
+    UPDATE INGREDIENTE_RECETA
+    SET CANTIDAD = p_cantidad
+    WHERE ID_RECETA = p_id_receta AND ID_INGREDIENTE = p_id_ingrediente;
+    COMMIT;
+END ACTUALIZAR_INGREDIENTE_RECETA;
+/
+
+-- Procedimiento para eliminar una relación entre ingrediente y receta
+CREATE OR REPLACE PROCEDURE ELIMINAR_INGREDIENTE_RECETA(
+    p_id_receta IN NUMBER,
+    p_id_ingrediente IN NUMBER
+)
+AS
+BEGIN
+    DELETE FROM INGREDIENTE_RECETA
+    WHERE ID_RECETA = p_id_receta AND ID_INGREDIENTE = p_id_ingrediente;
+    COMMIT;
+END ELIMINAR_INGREDIENTE_RECETA;
+/
+
+-- TABLA ORDEN
+
+-- Procedimiento para crear una orden
+CREATE OR REPLACE PROCEDURE CREAR_ORDEN(
+    p_id_orden IN NUMBER,
+    p_fecha_orden IN DATE,
+    p_estado_orden IN VARCHAR2,
+    p_id_cliente IN NUMBER,
+    p_id_producto IN NUMBER
+)
+AS
+BEGIN
+    INSERT INTO ORDEN (ID_ORDEN, FECHA_ORDEN, ESTADO_ORDEN, ID_CLIENTE, ID_PRODUCTO)
+    VALUES (p_id_orden, p_fecha_orden, p_estado_orden, p_id_cliente, p_id_producto);
+    COMMIT;
+END CREAR_ORDEN;
+/
+
+-- Procedimiento para actualizar una orden (Nota: Normalmente no se actualizan las órdenes)
+CREATE OR REPLACE PROCEDURE ACTUALIZAR_ORDEN(
+    p_id_orden IN NUMBER,
+    p_fecha_orden IN DATE,
+    p_estado_orden IN VARCHAR2,
+    p_id_cliente IN NUMBER,
+    p_id_producto IN NUMBER
+)
+AS
+BEGIN
+    UPDATE ORDEN
+    SET FECHA_ORDEN = p_fecha_orden,
+        ESTADO_ORDEN = p_estado_orden,
+        ID_CLIENTE = p_id_cliente,
+        ID_PRODUCTO = p_id_producto
+    WHERE ID_ORDEN = p_id_orden;
+    COMMIT;
+END ACTUALIZAR_ORDEN;
+/
+
+-- Procedimiento para eliminar una orden
+CREATE OR REPLACE PROCEDURE ELIMINAR_ORDEN(
+    p_id_orden IN NUMBER
+)
+AS
+BEGIN
+    DELETE FROM ORDEN
+    WHERE ID_ORDEN = p_id_orden;
+    COMMIT;
+END ELIMINAR_ORDEN;
+/
+
+
+
+
+-- Vistas
+
+-- Vista para mostrar la información completa de los clientes
+CREATE OR REPLACE VIEW V_CLIENTES AS
+SELECT *
+FROM CLIENTE;
+
+-- Vista para mostrar la información completa de los productos
+CREATE OR REPLACE VIEW V_PRODUCTOS AS
+SELECT *
+FROM PRODUCTO;
+
+-- Vista para mostrar la información completa de las compras realizadas
+CREATE OR REPLACE VIEW V_COMPRAS AS
+SELECT *
+FROM COMPRA;
+
+-- Vista para mostrar la información completa de los proveedores de ingredientes
+CREATE OR REPLACE VIEW V_PROVEEDORES_INGREDIENTES AS
+SELECT *
+FROM PROVEEDOR
+WHERE ID_PROVEEDOR IN (SELECT ID_PROVEEDOR FROM INGREDIENTE);
+
+-- Vista para mostrar la información completa de los ingredientes
+CREATE OR REPLACE VIEW V_INGREDIENTES AS
+SELECT *
+FROM INGREDIENTE;
+
+-- Vista para mostrar la información completa de las recetas
+CREATE OR REPLACE VIEW V_RECETAS AS
+SELECT *
+FROM RECETA;
+
+-- Vista para mostrar la información completa de las órdenes
+CREATE OR REPLACE VIEW V_ORDENES AS
+SELECT *
+FROM ORDEN;
+
+-- Vista para mostrar la información completa de los empleados
+CREATE OR REPLACE VIEW V_EMPLEADOS AS
+SELECT *
+FROM EMPLEADO;
+
+-- Vista para mostrar la información completa de los departamentos
+CREATE OR REPLACE VIEW V_DEPARTAMENTOS AS
+SELECT *
+FROM DEPARTAMENTO;
+
+-- Vista para mostrar la información completa de los ingredientes y sus recetas asociadas
+CREATE OR REPLACE VIEW V_INGREDIENTES_RECETAS AS
+SELECT IR.ID_INGREDIENTE, IR.ID_RECETA, IR.CANTIDAD AS CANTIDAD_INGREDIENTE,
+       I.NOMBRE AS NOMBRE_INGREDIENTE, R.NOMBRE_RECETA
+FROM INGREDIENTE_RECETA IR
+JOIN INGREDIENTE I ON IR.ID_INGREDIENTE = I.ID_INGREDIENTE
+JOIN RECETA R ON IR.ID_RECETA = R.ID_RECETA;
+
+
+-- Funciones
+CREATE OR REPLACE FUNCTION CONSULTAR_INGREDIENTES(
+    p_nombre_ingrediente IN VARCHAR2
+) RETURN VARCHAR2
 IS
-    v_cantidad INGREDIENTE.CANTIDAD%TYPE;
-    v_precio_unitario INGREDIENTE.PRECIO_UNITARIO%TYPE;
-    v_nombre_proveedor PROVEEDOR.NOMBRE%TYPE;
+    v_info_ingrediente VARCHAR2(4000);
 BEGIN
     -- Buscar la información del ingrediente
-    SELECT i.CANTIDAD, i.PRECIO_UNITARIO, p.NOMBRE
-    INTO v_cantidad, v_precio_unitario, v_nombre_proveedor
+    SELECT 'Cantidad: ' || i.CANTIDAD || ', Precio unitario: ' || i.PRECIO_UNITARIO || ', Proveedor: ' || p.NOMBRE
+    INTO v_info_ingrediente
     FROM INGREDIENTE i
     INNER JOIN PROVEEDOR p ON i.ID_PROVEEDOR = p.ID_PROVEEDOR
     WHERE i.NOMBRE = p_nombre_ingrediente;
 
-    -- Mostrar la información
-    DBMS_OUTPUT.PUT_LINE('Cantidad: ' || v_cantidad);
-    DBMS_OUTPUT.PUT_LINE('Precio unitario: ' || v_precio_unitario);
-    DBMS_OUTPUT.PUT_LINE('Proveedor: ' || v_nombre_proveedor);
+    RETURN v_info_ingrediente;
 EXCEPTION
     WHEN NO_DATA_FOUND THEN
-        DBMS_OUTPUT.PUT_LINE('No se encontró ningún ingrediente con ese nombre.');
+        RETURN 'No se encontró ningún ingrediente con ese nombre.';
     WHEN OTHERS THEN
-        DBMS_OUTPUT.PUT_LINE('Ocurrió un error al procesar la solicitud.');
-END obtener_info_ingrediente;
+        RETURN 'Ocurrió un error al procesar la solicitud.';
+END CONSULTAR_INGREDIENTES;
 /
 
-CREATE OR REPLACE PROCEDURE MOSTRAR_ORDEN_POR_CLIENTE (
+CREATE OR REPLACE FUNCTION MOSTRAR_ORDEN_POR_CLIENTE (
     nombre_cliente IN VARCHAR2
-) AS
-    v_cliente_id CLIENTE.ID_CLIENTE%TYPE;
+) RETURN VARCHAR2
+AS
+    v_resultado VARCHAR2(4000); -- Se asume que la longitud máxima del resultado es de 4000 caracteres
 BEGIN
     -- Obtener el ID del cliente basado en su nombre
-    SELECT ID_CLIENTE INTO v_cliente_id
-    FROM CLIENTE
-    WHERE UPPER(NOMBRE) = UPPER(nombre_cliente);
+    DECLARE
+        v_cliente_id CLIENTE.ID_CLIENTE%TYPE;
+    BEGIN
+        SELECT ID_CLIENTE INTO v_cliente_id
+        FROM CLIENTE
+        WHERE UPPER(NOMBRE) = UPPER(nombre_cliente);
+    EXCEPTION
+        WHEN NO_DATA_FOUND THEN
+            RETURN 'El cliente ' || nombre_cliente || ' no tiene órdenes.';
+    END;
 
     -- Mostrar las órdenes del cliente
     FOR orden_rec IN (SELECT ORDEN.ID_ORDEN, ORDEN.FECHA_ORDEN, ORDEN.ESTADO_ORDEN, ORDEN.ID_PRODUCTO, PRODUCTO.NOMBRE AS NOMBRE_PRODUCTO
                       FROM ORDEN
                       JOIN PRODUCTO ON ORDEN.ID_PRODUCTO = PRODUCTO.ID_PRODUCTO
                       WHERE ORDEN.ID_CLIENTE = v_cliente_id) LOOP
-        DBMS_OUTPUT.PUT_LINE('ID de Orden: ' || orden_rec.ID_ORDEN);
-        DBMS_OUTPUT.PUT_LINE('Fecha de Orden: ' || TO_CHAR(orden_rec.FECHA_ORDEN, 'DD-MON-YYYY'));
-        DBMS_OUTPUT.PUT_LINE('Estado de Orden: ' || orden_rec.ESTADO_ORDEN);
-        DBMS_OUTPUT.PUT_LINE('ID de Producto: ' || orden_rec.ID_PRODUCTO);
-        DBMS_OUTPUT.PUT_LINE('Nombre del Producto: ' || orden_rec.NOMBRE_PRODUCTO);
-        DBMS_OUTPUT.PUT_LINE('------------------------------------');
+        v_resultado := v_resultado || 'ID de Orden: ' || orden_rec.ID_ORDEN || ', Fecha de Orden: ' || TO_CHAR(orden_rec.FECHA_ORDEN, 'DD-MON-YYYY') || ', Estado de Orden: ' || orden_rec.ESTADO_ORDEN || ', ID de Producto: ' || orden_rec.ID_PRODUCTO || ', Nombre del Producto: ' || orden_rec.NOMBRE_PRODUCTO || CHR(10);
     END LOOP;
 
-    -- Si no se encuentra ninguna orden
-    IF SQL%NOTFOUND THEN
-        DBMS_OUTPUT.PUT_LINE('El cliente ' || nombre_cliente || ' no tiene órdenes.');
-    END IF;
-END;
+    RETURN v_resultado;
+END MOSTRAR_ORDEN_POR_CLIENTE;
 /
 
-CREATE OR REPLACE PROCEDURE OBTENER_EMPLEADO_POR_NOMBRE (
+CREATE OR REPLACE FUNCTION OBTENER_EMPLEADO_POR_NOMBRE (
     nombre_empleado IN VARCHAR2
-) AS
-    v_empleado_id EMPLEADO.ID_EMPLEADO%TYPE;
-    v_departamento_nombre DEPARTAMENTO.NOMBRE%TYPE;
+) RETURN VARCHAR2
+AS
+    v_resultado VARCHAR2(4000);
 BEGIN
     -- Obtener el ID del empleado basado en su nombre
-    SELECT ID_EMPLEADO INTO v_empleado_id
-    FROM EMPLEADO
-    WHERE UPPER(NOMBRE) = UPPER(nombre_empleado);
+    DECLARE
+        v_empleado_id EMPLEADO.ID_EMPLEADO%TYPE;
+        v_departamento_nombre DEPARTAMENTO.NOMBRE%TYPE;
+    BEGIN
+        SELECT ID_EMPLEADO INTO v_empleado_id
+        FROM EMPLEADO
+        WHERE UPPER(NOMBRE) = UPPER(nombre_empleado);
+    EXCEPTION
+        WHEN NO_DATA_FOUND THEN
+            RETURN 'No se encontró ningún empleado con el nombre ' || nombre_empleado;
+    END;
 
     -- Obtener los detalles del empleado
-    SELECT e.ID_EMPLEADO, e.NOMBRE, e.APELLIDO, e.PUESTO, e.SALARIO, e.FECHA_CONTRATACION, d.NOMBRE
-    INTO v_empleado_id, v_departamento_nombre
+    SELECT e.ID_EMPLEADO || ', ' || e.NOMBRE || ', ' || e.APELLIDO || ', ' || e.PUESTO || ', ' || e.SALARIO || ', ' || TO_CHAR(e.FECHA_CONTRATACION, 'DD-MON-YYYY') || ', ' || d.NOMBRE
+    INTO v_resultado
     FROM EMPLEADO e
     INNER JOIN DEPARTAMENTO d ON e.ID_DEPARTAMENTO = d.ID_DEPARTAMENTO
     WHERE e.ID_EMPLEADO = v_empleado_id;
 
-    -- Mostrar los detalles del empleado
-    DBMS_OUTPUT.PUT_LINE('ID de Empleado: ' || v_empleado_id);
-    DBMS_OUTPUT.PUT_LINE('Nombre: ' || nombre_empleado);
-    DBMS_OUTPUT.PUT_LINE('Apellido: ' || v_apellido);
-    DBMS_OUTPUT.PUT_LINE('Puesto: ' || v_puesto);
-    DBMS_OUTPUT.PUT_LINE('Salario: ' || v_salario);
-    DBMS_OUTPUT.PUT_LINE('Fecha de Contratación: ' || TO_CHAR(v_fecha_contratacion, 'DD-MON-YYYY'));
-    DBMS_OUTPUT.PUT_LINE('Departamento: ' || v_departamento_nombre);
-EXCEPTION
-    WHEN NO_DATA_FOUND THEN
-        DBMS_OUTPUT.PUT_LINE('No se encontró ningún empleado con el nombre ' || nombre_empleado);
-END;
+    RETURN v_resultado;
+END OBTENER_EMPLEADO_POR_NOMBRE;
 /
 
-CREATE OR REPLACE PROCEDURE NUMERO_TOTAL_COMPRAS_POR_CLIENTE (
+CREATE OR REPLACE FUNCTION NUMERO_TOTAL_COMPRAS_POR_CLIENTE (
     nombre_cliente IN VARCHAR2
-) AS
+) RETURN NUMBER
+AS
     v_cliente_id CLIENTE.ID_CLIENTE%TYPE;
     v_total_compras NUMBER;
 BEGIN
@@ -203,17 +680,17 @@ BEGIN
     FROM COMPRA
     WHERE ID_CLIENTE = v_cliente_id;
 
-    -- Mostrar el número total de compras del cliente
-    DBMS_OUTPUT.PUT_LINE('El cliente ' || nombre_cliente || ' ha realizado un total de ' || v_total_compras || ' compras.');
+    RETURN v_total_compras;
 EXCEPTION
     WHEN NO_DATA_FOUND THEN
-        DBMS_OUTPUT.PUT_LINE('No se encontró ningún cliente con el nombre ' || nombre_cliente);
-END;
+        RETURN NULL;
+END NUMERO_TOTAL_COMPRAS_POR_CLIENTE;
 /
 
-CREATE OR REPLACE PROCEDURE CONTAR_VENTAS_POR_PRODUCTO (
+CREATE OR REPLACE FUNCTION CONTAR_VENTAS_POR_PRODUCTO (
     nombre_producto IN VARCHAR2
-) AS
+) RETURN NUMBER
+AS
     v_producto_id PRODUCTO.ID_PRODUCTO%TYPE;
     v_cantidad_ventas NUMBER;
 BEGIN
@@ -227,150 +704,36 @@ BEGIN
     FROM COMPRA
     WHERE ID_PRODUCTO = v_producto_id;
 
-    -- Mostrar la cantidad total de ventas del producto
-    DBMS_OUTPUT.PUT_LINE('El producto ' || nombre_producto || ' ha sido vendido ' || v_cantidad_ventas || ' veces.');
+    RETURN v_cantidad_ventas;
 EXCEPTION
     WHEN NO_DATA_FOUND THEN
-        DBMS_OUTPUT.PUT_LINE('No se encontró ningún producto con el nombre ' || nombre_producto);
-END;
+        RETURN NULL;
+END CONTAR_VENTAS_POR_PRODUCTO;
 /
 
-CREATE OR REPLACE PROCEDURE MOSTRAR_EMPLEADOS_POR_DEPARTAMENTO AS
+CREATE OR REPLACE FUNCTION MOSTRAR_EMPLEADOS_POR_DEPARTAMENTO RETURN VARCHAR2
+AS
+    v_resultado VARCHAR2(4000); 
 BEGIN
-    FOR dept IN (SELECT D.NOMBRE AS DEPARTAMENTO, COUNT(E.ID_EMPLEADO) AS CANTIDAD_DE_EMPLEADOS
+    FOR dept IN (SELECT D.NOMBRE AS DEPARTAMENTO, COUNT(E.ID_EMPLEADO) AS CANTIDAD_EMPLEADOS
                  FROM DEPARTAMENTO D
                  LEFT JOIN EMPLEADO E ON D.ID_DEPARTAMENTO = E.ID_DEPARTAMENTO
                  GROUP BY D.NOMBRE) LOOP
-        DBMS_OUTPUT.PUT_LINE('Departamento: ' || dept.DEPARTAMENTO || ', Cantidad de empleados: ' || dept.CANTIDAD_EMPLEADOS);
+        v_resultado := v_resultado || 'Departamento: ' || dept.DEPARTAMENTO || ', Cantidad de empleados: ' || dept.CANTIDAD_EMPLEADOS || CHR(10);
     END LOOP;
-END;
-/
 
-CREATE OR REPLACE PROCEDURE OBSERVAR_MENU
-IS
-BEGIN
-    DBMS_OUTPUT.PUT_LINE ('INGRESAR A MENU');
-    DBMS_OUTPUT.PUT_LINE('1. POSTRES');
-    DBMS_OUTPUT.PUT_LINE('2. PANES');
-    DBMS_OUTPUT.PUT_LINE('3. ENCHILADAS');
-    DBMS_OUTPUT.PUT_LINE('4. EMPANADAS');
-    DBMS_OUTPUT.PUT_LINE('5. GALLETAS');
-    DBMS_OUTPUT.PUT_LINE('3. CAFE');
-    DBMS_OUTPUT.PUT_LINE('4. CHOCOLATE');
-END;
-/
-
----obtener cantidad de mesas disponibles
-CREATE OR REPLACE PROCEDURE CANT_MESAS_DISP (
-    restaurante_id IN NUMBER,
-    cantidad_mesas OUT NUMBER
-) AS
-BEGIN
-    SELECT COUNT(*)
-    INTO cantidad_mesas
-    FROM mesas
-    WHERE restaurante_id = restaurante_id
-    AND estado = 'disponible';
-END contar_mesas_disponibles;
+    RETURN v_resultado;
+END MOSTRAR_EMPLEADOS_POR_DEPARTAMENTO;
 /
 
 
-
------obtener dias transcurridos
-CREATE OR REPLACE PROCEDURE DIAS_TRANSCURRIDOS (
-    cantidad_dias IN VARCHAR2
-) AS
-    v_dias_id DIAS.ID_DIAS%TYPE;
-    v_total_dias NUMBER;
-BEGIN
-
-    -- Contar el número total de dias transcurridos
-    SELECT COUNT(*) INTO v_total_dias
-    FROM CANTIDAD_DIAS
-    WHERE ID_DIAS = v_dias_id;
-
-    -- Mostrar el número total de dias transcurridos
-    DBMS_OUTPUT.PUT_LINE('Han transcurrido' || v_total_dias);
-END;
-/
-
--- obtener inventario
-CREATE OR REPLACE PROCEDURE OBTENER_INVENTARIO (
-    restaurante_id IN NUMBER,
-    material_id IN NUMBER,
-    cantidad IN NUMBER
-) AS
-BEGIN
-    INSERT INTO inventario_restaurante (restaurante_id, material_id, cantidad)
-    VALUES (restaurante_id, material_id, cantidad);
-
-    COMMIT;
-END guardar_inventario;
-/
-
-
------------Obtener descuento
-CREATE OR REPLACE PROCEDURE OBTENER_DESCUENTO(
-    monto_total IN NUMBER,
-    descuento_porcentaje OUT NUMBER
-) AS
-BEGIN
-    IF monto_total >= 10500 THEN
-        descuento_porcentaje := 10; -- 10% de descuento si el monto supera los 1000
-    ELSE
-        descuento_porcentaje := 0; -- No hay descuento si el monto es menor a 1000
-    END IF;
-END calcular_descuento;
-/
-
---VISTAS--
-
---Vista de empleados por departamento:
-CREATE VIEW EMPLEADOS_POR_DEPARTAMENTO AS
-SELECT D.NOMBRE, COUNT(*) AS CANTIDAD_EMPLEADOS, AVG(E.SALARIO) AS SALARIO_PROMEDIO
-FROM EMPLEADO E
-JOIN DEPARTAMENTO D ON E.ID_DEPARTAMENTO = D.ID_DEPARTAMENTO
-GROUP BY D.ID_DEPARTAMENTO, D.NOMBRE;
-
---Vista de productos por vencimiento:
-CREATE VIEW PRODUCTOS_POR_VENCIMIENTO AS
-SELECT P.NOMBRE, P.PRECIO, P.CANTIDAD, P.FECHA_VENCIMIENTO,
-CASE
-    WHEN P.FECHA_VENCIMIENTO <= SYSDATE THEN 'Vencido'
-    WHEN P.FECHA_VENCIMIENTO BETWEEN SYSDATE AND SYSDATE + 30 THEN 'Por vencer'
-    ELSE 'Vigente'
-END AS ESTADO_VENCIMIENTO
-FROM PRODUCTO P;
-
---Vista de detalles de ingredientes con la receta y el proveedor:
-CREATE VIEW VISTA_INGREDIENTES_RECETA_PROVEEDOR AS
-SELECT R.NOMBRE_RECETA, I.NOMBRE AS INGREDIENTE, I.CANTIDAD, I.PRECIO_UNITARIO, PR.NOMBRE AS PROVEEDOR
-FROM INGREDIENTE_RECETA IR
-JOIN INGREDIENTE I ON IR.ID_INGREDIENTE = I.ID_INGREDIENTE
-JOIN PROVEEDOR PR ON I.ID_PROVEEDOR = PR.ID_PROVEEDOR
-JOIN RECETA R ON IR.ID_RECETA = R.ID_RECETA;
-
---CLIENTES.1
-CREATE VIEW VISTA_CLIENTES AS
-SELECT C.ID_CLIENTE, C.NOMBRE, C.APELLIDO, C.DIRECCION, C.CORREO, C.TELEFONO
-FROM CLIENTE C;
-
-
---GANANCIAS TOTALES DE COMPRAS DE CADA CLIENTE Y SU NOMBRE.1
-CREATE VIEW VISTA_GANANCIAS_TOTALES AS
-SELECT C.ID_CLIENTE, C.NOMBRE, C.APELLIDO, SUM(COMPR.GANANCIA) AS GANANCIAS_TOTALES
-FROM COMPRA COMPR
-JOIN CLIENTE C ON C.ID_CLIENTE = COMPR.ID_CLIENTE
-GROUP BY C.ID_CLIENTE, C.NOMBRE, C.APELLIDO;
-
---ORDENES POR CADA CLIENTE:
-CREATE VIEW VISTA_ORDEDENES_POR_CLIENTE AS
-SELECT C.ID_CLIENTE, C.NOMBRE, C.APELLIDO, COUNT(ORD.ID_ORDEN) AS CANTIDAD_ORDENES
-FROM ORDEN ORD
-JOIN CLIENTE C ON ORD.ID_CLIENTE = C.ID_CLIENTE
-GROUP BY C.ID_CLIENTE, C.NOMBRE, C.APELLIDO;
-
---PROVEEDORES.1
-CREATE VIEW VISTA_PROVEEDORES AS
-SELECT *
-FROM PROVEEDOR;
+DROP TABLE COMPRA;
+DROP TABLE PRODUCTO;
+DROP TABLE INGREDIENTE_RECETA;
+DROP TABLE RECETA;
+DROP TABLE INGREDIENTE;
+DROP TABLE CLIENTE;
+DROP TABLE ORDEN;
+DROP TABLE EMPLEADO;
+DROP TABLE PROVEEDOR;
+DROP TABLE DEPARTAMENTO;
