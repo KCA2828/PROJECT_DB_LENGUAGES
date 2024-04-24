@@ -1,0 +1,268 @@
+/*
+En esta función se devuelve una cadena de caracteres que contiene la lista de proveedores y la cantidad de productos que suministran cada uno.
+No se le ingresa ninguno, y retorna los valores en un VARCHAR2
+*/
+
+CREATE OR REPLACE FUNCTION obtener_productos_por_proveedor RETURN VARCHAR2 AS
+    v_resultado VARCHAR2(1000); -- Variable para almacenar el resultado
+    CURSOR v_cursor IS -- Cursor para recuperar la información de los proveedores y la cantidad de productos
+        SELECT PR.NOMBRE, COUNT(*) AS CANTIDAD_PRODUCTOS
+        FROM PROVEEDOR PR
+        INNER JOIN INGREDIENTE I ON PR.ID_PROVEEDOR = I.ID_PROVEEDOR
+        GROUP BY PR.NOMBRE;
+    v_nombre_producto PROVEEDOR.NOMBRE%TYPE;
+    v_cantidad_productos NUMBER;
+BEGIN
+    v_resultado := ''; -- Inicializa el resultado
+    -- Bucle FOR para repetir los resultados del cursor y construir la cadena de caracteres en el resultado
+    FOR rec IN v_cursor LOOP
+        v_resultado := v_resultado || 'Proveedor: ' || rec.NOMBRE || ', Cantidad de Productos: ' || rec.CANTIDAD_PRODUCTOS || CHR(10); -- CHR(10) es un salto de línea
+    END LOOP;
+    RETURN v_resultado; -- Devuelve la cadena de resultado
+END;
+/
+
+SELECT obtener_productos_por_proveedor1() FROM dual;
+----------------------------------------------------
+/*
+Esta función devuelve el total de ventas para un mes y año específico.
+En los Parámetros Utilizamos:
+- p_mes (IN NUMBER): Aqui colocamos el número del mes para el cual se desea calcular el total de ventas.
+- p_anio (IN NUMBER): Aqui colocamos el año para el cual se desea calcular el total de ventas.
+Retorna el resultado por medio de un  NUMBER
+*/
+
+CREATE OR REPLACE FUNCTION calcular_total_ventas_mes_anio1(p_mes IN NUMBER, p_anio IN NUMBER) RETURN NUMBER AS
+    v_total_ventas NUMBER := 0; -- Variable para almacenar el total de ventas
+    CURSOR v_cursor IS -- Cursor para recuperar el total de ventas para el mes y año especificados
+        SELECT SUM(GANANCIA) AS total_ventas
+        FROM COMPRA 
+        WHERE EXTRACT(MONTH FROM FECHA) = p_mes AND EXTRACT(YEAR FROM FECHA) = p_anio;
+BEGIN
+    OPEN v_cursor; -- Se abre el cursor
+    FETCH v_cursor INTO v_total_ventas; -- Se obtiene el total de ventas
+    CLOSE v_cursor; -- Se cierra el cursor
+    
+    RETURN v_total_ventas; -- Se devuelve el total de ventas
+END;
+/
+
+-- Comando para ejecutar la función y mostrar el resultado
+SELECT calcular_total_ventas_mes_anio1(1, 2024) FROM dual;
+--------------------------------------------------------
+/*
+En esta función se devuelve una lista de clientes que han realizado más de 3 compras.
+Se retorna la informacion por medio de un VARCHAR2
+*/
+
+CREATE OR REPLACE FUNCTION obtener_clientes_mas_3_compras1 RETURN VARCHAR2 AS
+    v_resultado VARCHAR2(2000); -- Variable para almacenar el resultado
+    CURSOR v_cursor IS -- Cursor para recuperar los clientes que han realizado más de 3 compras
+        SELECT C.ID_CLIENTE
+        FROM CLIENTE C
+        WHERE (SELECT COUNT(*) FROM COMPRA WHERE ID_CLIENTE = C.ID_CLIENTE) > 3;
+    v_id_cliente CLIENTE.ID_CLIENTE%TYPE;
+BEGIN
+    v_resultado := ''; -- Inicializa el resultado
+    OPEN v_cursor; -- Se abre el cursor
+    LOOP
+        FETCH v_cursor INTO v_id_cliente;
+        EXIT WHEN v_cursor%NOTFOUND; -- Se sale del bucle cuando no hay más datos
+        -- Se construye la cadena de resultado con la información de cada cliente
+        v_resultado := v_resultado || 'Cliente ID: ' || v_id_cliente || ' tiene más de 3 compras realizadas.' || CHR(10); -- CHR(10) es un salto de línea
+    END LOOP;
+    CLOSE v_cursor; -- Se cierra el cursor
+    RETURN v_resultado; -- Se devuelve la cadena de resultado
+END;
+/
+
+-- Comando para ejecutar la función y mostrar el resultado
+SELECT obtener_clientes_mas_3_compras1() FROM dual;
+-------------------------------------------------------
+/*
+Esta función devuelve una lista de ID de clientes que tienen órdenes pendientes.
+Se devuelve la informacion por medio de un VARCHAR2
+*/
+
+CREATE OR REPLACE FUNCTION obtener_ordenes_pendientes1 RETURN VARCHAR2 AS
+    v_resultado VARCHAR2(2000); -- Variable para almacenar el resultado
+    CURSOR v_cursor IS -- Cursor para recuperar los IDs de clientes con órdenes pendientes
+        SELECT ID_CLIENTE
+        FROM ORDEN
+        WHERE ESTADO_ORDEN = 'Pendiente';
+    v_id_cliente ORDEN.ID_CLIENTE%TYPE;
+BEGIN
+    v_resultado := ''; -- Inicializa el resultado
+    OPEN v_cursor; -- Se abre el cursor
+    LOOP
+        FETCH v_cursor INTO v_id_cliente;
+        EXIT WHEN v_cursor%NOTFOUND; -- Se sale del bucle cuando no hay más datos
+        -- Se construye la cadena de resultado con la información de cada cliente
+        v_resultado := v_resultado || 'ID de orden pendiente: ' || v_id_cliente || CHR(10); -- CHR(10) es un salto de línea
+    END LOOP;
+    CLOSE v_cursor; -- Se cierra el cursor
+    RETURN v_resultado; -- Se devuelve la cadena de resultado
+END;
+/
+
+-- Comando para ejecutar la función y mostrar el resultado
+SELECT obtener_ordenes_pendientes1() FROM dual;
+--------------------------------------------
+/*
+La siguiente función calcula el total de ingredientes para una receta específica.
+Se emplearon como parámetros:
+- p_receta_id (IN NUMBER): Aqui se ingresa el ID de la receta para la cual se desea calcular el total de ingredientes.
+Se retorna por medio de un NUMBER
+*/
+
+CREATE OR REPLACE FUNCTION calcular_total_ingredientes_receta1(p_receta_id IN NUMBER) RETURN NUMBER AS
+    v_total_ingredientes NUMBER := 0; -- Variable para almacenar el total de ingredientes
+    CURSOR v_cursor IS -- Cursor para contar los ingredientes de la receta especificada
+        SELECT COUNT(*) AS total_ingredientes FROM INGREDIENTE_RECETA WHERE ID_RECETA = p_receta_id;
+BEGIN
+    OPEN v_cursor; -- Se abre el cursor
+    FETCH v_cursor INTO v_total_ingredientes; -- Se obtiene el total de ingredientes
+    CLOSE v_cursor; -- Se cierra el cursor
+    
+    RETURN v_total_ingredientes; -- Se devuelve el total de ingredientes
+END;
+/
+
+-- Comando para ejecutar la función y mostrar el resultado
+SELECT calcular_total_ingredientes_receta1  (1) FROM dual;
+------------------------------------------
+/*
+La función devuelve una lista de recetas con sus respectivos ingredientes y cantidades.
+Se devuelve por un VARCHAR2
+*/
+
+CREATE OR REPLACE FUNCTION obtener_recetas_con_ingredientes1 RETURN VARCHAR2 AS
+    v_resultado VARCHAR2(4000); -- Variable para almacenar el resultado
+    CURSOR v_cursor IS -- Cursor para obtener las recetas con sus ingredientes y cantidades
+        SELECT R.NOMBRE_RECETA, I.NOMBRE AS NOMBRE_INGREDIENTE, IR.CANTIDAD
+        FROM RECETA R
+        INNER JOIN INGREDIENTE_RECETA IR ON R.ID_RECETA = IR.ID_RECETA
+        INNER JOIN INGREDIENTE I ON IR.ID_INGREDIENTE = I.ID_INGREDIENTE;
+    v_nombre_receta RECETA.NOMBRE_RECETA%TYPE; -- Variable para el nombre de la receta
+    v_nombre_ingrediente INGREDIENTE.NOMBRE%TYPE; -- Variable para el nombre del ingrediente
+    v_cantidad INGREDIENTE_RECETA.CANTIDAD%TYPE; -- Variable para la cantidad de ingrediente
+BEGIN
+    v_resultado := ''; -- Inicializa el resultado
+    OPEN v_cursor; -- Se abre el cursor
+    LOOP
+        FETCH v_cursor INTO v_nombre_receta, v_nombre_ingrediente, v_cantidad;
+        EXIT WHEN v_cursor%NOTFOUND; -- Se sale del bucle cuando no hay más datos
+        -- Se construye la cadena de resultado con la información de cada receta e ingrediente
+        v_resultado := v_resultado || 'Receta: ' || v_nombre_receta || ', Ingrediente: ' || v_nombre_ingrediente || ', Cantidad: ' || v_cantidad || CHR(10); -- CHR(10) es un salto de línea
+    END LOOP;
+    CLOSE v_cursor; -- Se cierra el cursor
+    RETURN v_resultado; -- Se devuelve la cadena de resultado
+END;
+/
+
+-- Comando para ejecutar la función y mostrar el resultado
+SELECT obtener_recetas_con_ingredientes1() FROM dual;
+
+-------------------------------------------------------
+/*
+En esta función se calcula las ganancias totales de todos los productos.
+y se retorna en un NUMBER
+*/
+
+CREATE OR REPLACE FUNCTION calcular_ganancias_totales_productos RETURN NUMBER AS
+    v_total_ganancias NUMBER := 0; -- Variable para almacenar las ganancias totales
+BEGIN
+    -- Se suma el total de ganancias de todos los productos
+    SELECT SUM(GANANCIA) INTO v_total_ganancias FROM COMPRA;
+    
+    RETURN v_total_ganancias; -- Se devuelve el total de ganancias
+END;
+/
+
+-- Comando para ejecutar la función y mostrar el resultado
+SELECT calcular_ganancias_totales_productos() FROM dual;
+
+
+
+---TRIGGERS---
+--1.Después de insertar un nuevo cliente:
+CREATE OR REPLACE TRIGGER trg_despues_insertar_cliente
+AFTER INSERT ON CLIENTE
+FOR EACH ROW
+BEGIN
+    DBMS_OUTPUT.PUT_LINE('Se ha insertado un nuevo cliente con ID: ' || :new.ID_CLIENTE);
+    --Aquí se podrian agregar acciones adicionales, como enviar un correo electrónico de bienvenida.
+END;
+/
+
+--2.Después de actualizar el estado de una orden:
+CREATE OR REPLACE TRIGGER trg_despues_actualizar_estado_orden
+AFTER UPDATE OF ESTADO_ORDEN ON ORDEN
+FOR EACH ROW
+BEGIN
+    DBMS_OUTPUT.PUT_LINE('El estado de la orden con ID ' || :new.ID_ORDEN || ' ha sido actualizado a: ' || :new.ESTADO_ORDEN);
+END;
+/
+
+--3.Antes de eliminar un producto con cantidad mayor que cero:
+CREATE OR REPLACE TRIGGER trg_antes_eliminar_producto
+BEFORE DELETE ON PRODUCTO
+FOR EACH ROW
+BEGIN
+    IF :old.CANTIDAD > 0 THEN
+        RAISE_APPLICATION_ERROR(-20001, 'No se puede eliminar un producto con cantidad mayor que cero.');
+    END IF;
+END;
+/
+
+
+--4.Después de insertar un nuevo empleado:
+CREATE OR REPLACE TRIGGER trg_despues_insertar_empleado
+AFTER INSERT ON EMPLEADO
+FOR EACH ROW
+BEGIN
+    DBMS_OUTPUT.PUT_LINE('Se ha insertado un nuevo empleado con ID: ' || :new.ID_EMPLEADO);
+END;
+/
+
+
+--5.Después de actualizar el salario de un empleado:
+CREATE OR REPLACE TRIGGER trg_despues_actualizar_salario_empleado
+AFTER UPDATE OF SALARIO ON EMPLEADO
+FOR EACH ROW
+BEGIN
+    DBMS_OUTPUT.PUT_LINE('El salario del empleado ' || :new.NOMBRE || ' ' || :new.APELLIDO || ' ha sido actualizado a: ' || :new.SALARIO);
+END;
+/
+
+
+--6.Después de insertar un nuevo proveedor:
+CREATE OR REPLACE TRIGGER trg_despues_insertar_proveedor
+AFTER INSERT ON PROVEEDOR
+FOR EACH ROW
+BEGIN
+    DBMS_OUTPUT.PUT_LINE('Se ha insertado un nuevo proveedor con ID: ' || :new.ID_PROVEEDOR);
+END;
+/
+
+
+--7.Antes de eliminar un ingrediente de una receta:
+CREATE OR REPLACE TRIGGER trg_antes_eliminar_ingrediente_receta
+BEFORE DELETE ON INGREDIENTE_RECETA
+FOR EACH ROW
+DECLARE
+    v_cantidad_ingredientes NUMBER;
+BEGIN
+    -- Verificar la cantidad de ingredientes asociados a la receta antes de eliminar el actual
+    SELECT COUNT(*)
+    INTO v_cantidad_ingredientes
+    FROM INGREDIENTE_RECETA
+    WHERE ID_RECETA = :OLD.ID_RECETA;
+
+    IF v_cantidad_ingredientes = 1 THEN
+        RAISE_APPLICATION_ERROR(-20001, 'No se puede eliminar el último ingrediente asociado a la receta.');
+    END IF;
+    
+    -- Aquí se podrian agregar otras acciones adicionales si es necesario.
+END;
+/
