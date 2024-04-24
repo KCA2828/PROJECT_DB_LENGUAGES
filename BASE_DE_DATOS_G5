@@ -97,433 +97,674 @@ CREATE TABLE EMPLEADO (
 
 
 
--- Procedimientos almacenados
+-- Procedimientos almacenados y paquetes
 
 -- TABLA PROVEEDORES
-CREATE OR REPLACE PROCEDURE CREAR_PROVEEDOR(
-    p_id_proveedor IN NUMBER,
-    p_nombre IN VARCHAR2,
-    p_direccion IN VARCHAR2,
-    p_correo IN VARCHAR2,
-    p_telefono IN VARCHAR2
-)
-AS
-BEGIN
-    INSERT INTO PROVEEDOR (ID_PROVEEDOR, NOMBRE, DIRECCION, CORREO, TELEFONO)
-    VALUES (p_id_proveedor, p_nombre, p_direccion, p_correo, p_telefono);
-    COMMIT;
-END CREAR_PROVEEDOR;
+CREATE OR REPLACE PACKAGE ProveedorPkg AS
+    PROCEDURE CrearProveedor(
+        p_id_proveedor IN NUMBER,
+        p_nombre IN VARCHAR2,
+        p_direccion IN VARCHAR2,
+        p_correo IN VARCHAR2,
+        p_telefono IN VARCHAR2
+    );
+    PROCEDURE ActualizarProveedor(
+        p_id_proveedor IN NUMBER,
+        p_nombre IN VARCHAR2,
+        p_direccion IN VARCHAR2,
+        p_correo IN VARCHAR2,
+        p_telefono IN VARCHAR2
+    );
+    PROCEDURE EliminarProveedor(
+        p_id_proveedor IN NUMBER
+    );
+END ProveedorPkg;
 /
 
-CREATE OR REPLACE PROCEDURE ACTUALIZAR_PROVEEDOR(
-    p_id_proveedor IN NUMBER,
-    p_nombre IN VARCHAR2,
-    p_direccion IN VARCHAR2,
-    p_correo IN VARCHAR2,
-    p_telefono IN VARCHAR2
-)
-AS
-BEGIN
-    UPDATE PROVEEDOR
-    SET NOMBRE = p_nombre,
-        DIRECCION = p_direccion,
-        CORREO = p_correo,
-        TELEFONO = p_telefono
-    WHERE ID_PROVEEDOR = p_id_proveedor;
-    COMMIT;
-END ACTUALIZAR_PROVEEDOR;
-/
+CREATE OR REPLACE PACKAGE BODY ProveedorPkg AS
+    PROCEDURE CrearProveedor(
+        p_id_proveedor IN NUMBER,
+        p_nombre IN VARCHAR2,
+        p_direccion IN VARCHAR2,
+        p_correo IN VARCHAR2,
+        p_telefono IN VARCHAR2
+    ) AS
+    BEGIN
+        INSERT INTO PROVEEDOR (ID_PROVEEDOR, NOMBRE, DIRECCION, CORREO, TELEFONO)
+        VALUES (p_id_proveedor, p_nombre, p_direccion, p_correo, p_telefono);
+        COMMIT;
+    END CrearProveedor;
 
-CREATE OR REPLACE PROCEDURE ELIMINAR_PROVEEDOR(
-    p_id_proveedor IN NUMBER
-)
-AS
-BEGIN
-    DELETE FROM PROVEEDOR
-    WHERE ID_PROVEEDOR = p_id_proveedor;
-    COMMIT;
-END ELIMINAR_PROVEEDOR;
+    PROCEDURE ActualizarProveedor(
+        p_id_proveedor IN NUMBER,
+        p_nombre IN VARCHAR2,
+        p_direccion IN VARCHAR2,
+        p_correo IN VARCHAR2,
+        p_telefono IN VARCHAR2
+    ) AS
+    BEGIN
+        UPDATE PROVEEDOR
+        SET NOMBRE = p_nombre,
+            DIRECCION = p_direccion,
+            CORREO = p_correo,
+            TELEFONO = p_telefono
+        WHERE ID_PROVEEDOR = p_id_proveedor;
+        COMMIT;
+    END ActualizarProveedor;
+
+    PROCEDURE EliminarProveedor(
+        p_id_proveedor IN NUMBER
+    ) AS
+    BEGIN
+        DELETE FROM PROVEEDOR
+        WHERE ID_PROVEEDOR = p_id_proveedor;
+        COMMIT;
+    END EliminarProveedor;
+END ProveedorPkg;
 /
 
 -- TABLA CLIENTES
-CREATE OR REPLACE PROCEDURE CREAR_CLIENTE(
-    p_id_cliente IN NUMBER,
-    p_nombre IN VARCHAR2,
-    p_apellido IN VARCHAR2,
-    p_direccion IN VARCHAR2,
-    p_correo IN VARCHAR2,
-    p_telefono IN VARCHAR2
-)
-AS
-BEGIN
-    INSERT INTO CLIENTE (ID_CLIENTE, NOMBRE, APELLIDO, DIRECCION, CORREO, TELEFONO)
-    VALUES (p_id_cliente, p_nombre, p_apellido, p_direccion, p_correo, p_telefono);
-    COMMIT;
-END CREAR_CLIENTE;
+CREATE OR REPLACE PACKAGE ClientePkg AS
+    PROCEDURE CrearCliente(
+        p_id_cliente IN NUMBER,
+        p_nombre IN VARCHAR2,
+        p_apellido IN VARCHAR2,
+        p_direccion IN VARCHAR2,
+        p_correo IN VARCHAR2,
+        p_telefono IN VARCHAR2
+    );
+    PROCEDURE ActualizarCliente(
+        p_id_cliente IN NUMBER,
+        p_nombre IN VARCHAR2,
+        p_apellido IN VARCHAR2,
+        p_direccion IN VARCHAR2,
+        p_correo IN VARCHAR2,
+        p_telefono IN VARCHAR2
+    );
+    PROCEDURE EliminarCliente(
+        p_id_cliente IN NUMBER
+    );
+END ClientePkg;
 /
 
-CREATE OR REPLACE PROCEDURE ACTUALIZAR_CLIENTE(
-    p_id_cliente IN NUMBER,
-    p_nombre IN VARCHAR2,
-    p_apellido IN VARCHAR2,
-    p_direccion IN VARCHAR2,
-    p_correo IN VARCHAR2,
-    p_telefono IN VARCHAR2
-)
-AS
-BEGIN
-    UPDATE CLIENTE
-    SET NOMBRE = p_nombre,
-        APELLIDO = p_apellido,
-        DIRECCION = p_direccion,
-        CORREO = p_correo,
-        TELEFONO = p_telefono
-    WHERE ID_CLIENTE = p_id_cliente;
-    COMMIT;
-END ACTUALIZAR_CLIENTE;
-/
+CREATE OR REPLACE PACKAGE BODY ClientePkg AS
+    PROCEDURE CrearCliente(
+        p_id_cliente IN NUMBER,
+        p_nombre IN VARCHAR2,
+        p_apellido IN VARCHAR2,
+        p_direccion IN VARCHAR2,
+        p_correo IN VARCHAR2,
+        p_telefono IN VARCHAR2
+    ) AS
+    BEGIN
+        INSERT INTO CLIENTE (ID_CLIENTE, NOMBRE, APELLIDO, DIRECCION, CORREO, TELEFONO)
+        VALUES (p_id_cliente, p_nombre, p_apellido, p_direccion, p_correo, p_telefono);
+        COMMIT;
+    END CrearCliente;
 
-CREATE OR REPLACE PROCEDURE ELIMINAR_CLIENTE(
-    p_id_cliente IN NUMBER
-)
-AS
-BEGIN
-    DELETE FROM CLIENTE
-    WHERE ID_CLIENTE = p_id_cliente;
-    COMMIT;
-END ELIMINAR_CLIENTE;
+    PROCEDURE ActualizarCliente(
+        p_id_cliente IN NUMBER,
+        p_nombre IN VARCHAR2,
+        p_apellido IN VARCHAR2,
+        p_direccion IN VARCHAR2,
+        p_correo IN VARCHAR2,
+        p_telefono IN VARCHAR2
+    ) AS
+    BEGIN
+        UPDATE CLIENTE
+        SET NOMBRE = p_nombre,
+            APELLIDO = p_apellido,
+            DIRECCION = p_direccion,
+            CORREO = p_correo,
+            TELEFONO = p_telefono
+        WHERE ID_CLIENTE = p_id_cliente;
+        COMMIT;
+    END ActualizarCliente;
+
+    PROCEDURE EliminarCliente(
+        p_id_cliente IN NUMBER
+    ) AS
+    BEGIN
+        DELETE FROM CLIENTE
+        WHERE ID_CLIENTE = p_id_cliente;
+        COMMIT;
+    END EliminarCliente;
+END ClientePkg;
 /
 
 -- TABLA DEPARTAMENTO
 
--- Procedimiento para crear un departamento
-CREATE OR REPLACE PROCEDURE CREAR_DEPARTAMENTO(
-    p_id_departamento IN NUMBER,
-    p_nombre IN VARCHAR2
-)
-AS
-BEGIN
-    INSERT INTO DEPARTAMENTO (ID_DEPARTAMENTO, NOMBRE)
-    VALUES (p_id_departamento, p_nombre);
-    COMMIT;
-END CREAR_DEPARTAMENTO;
+CREATE OR REPLACE PACKAGE DepartamentoPkg AS
+    PROCEDURE CrearDepartamento(
+        p_id_departamento IN NUMBER,
+        p_nombre IN VARCHAR2
+    );
+    PROCEDURE ActualizarDepartamento(
+        p_id_departamento IN NUMBER,
+        p_nombre IN VARCHAR2
+    );
+    PROCEDURE EliminarDepartamento(
+        p_id_departamento IN NUMBER
+    );
+END DepartamentoPkg;
 /
 
--- Procedimiento para actualizar un departamento
-CREATE OR REPLACE PROCEDURE ACTUALIZAR_DEPARTAMENTO(
-    p_id_departamento IN NUMBER,
-    p_nombre IN VARCHAR2
-)
-AS
-BEGIN
-    UPDATE DEPARTAMENTO
-    SET NOMBRE = p_nombre
-    WHERE ID_DEPARTAMENTO = p_id_departamento;
-    COMMIT;
-END ACTUALIZAR_DEPARTAMENTO;
-/
+CREATE OR REPLACE PACKAGE BODY DepartamentoPkg AS
+    PROCEDURE CrearDepartamento(
+        p_id_departamento IN NUMBER,
+        p_nombre IN VARCHAR2
+    ) AS
+    BEGIN
+        INSERT INTO DEPARTAMENTO (ID_DEPARTAMENTO, NOMBRE)
+        VALUES (p_id_departamento, p_nombre);
+        COMMIT;
+    END CrearDepartamento;
 
--- Procedimiento para eliminar un departamento
-CREATE OR REPLACE PROCEDURE ELIMINAR_DEPARTAMENTO(
-    p_id_departamento IN NUMBER
-)
-AS
-BEGIN
-    DELETE FROM DEPARTAMENTO
-    WHERE ID_DEPARTAMENTO = p_id_departamento;
-    COMMIT;
-END ELIMINAR_DEPARTAMENTO;
+    PROCEDURE ActualizarDepartamento(
+        p_id_departamento IN NUMBER,
+        p_nombre IN VARCHAR2
+    ) AS
+    BEGIN
+        UPDATE DEPARTAMENTO
+        SET NOMBRE = p_nombre
+        WHERE ID_DEPARTAMENTO = p_id_departamento;
+        COMMIT;
+    END ActualizarDepartamento;
+
+    PROCEDURE EliminarDepartamento(
+        p_id_departamento IN NUMBER
+    ) AS
+    BEGIN
+        DELETE FROM DEPARTAMENTO
+        WHERE ID_DEPARTAMENTO = p_id_departamento;
+        COMMIT;
+    END EliminarDepartamento;
+END DepartamentoPkg;
 /
 
 -- TABLA PRODUCTO
 
--- Procedimiento para crear un producto
-CREATE OR REPLACE PROCEDURE CREAR_PRODUCTO(
-    p_id_producto IN NUMBER,
-    p_nombre IN VARCHAR2,
-    p_precio IN NUMBER,
-    p_cantidad IN NUMBER,
-    p_fecha_vencimiento IN DATE
-)
-AS
-BEGIN
-    INSERT INTO PRODUCTO (ID_PRODUCTO, NOMBRE, PRECIO, CANTIDAD, FECHA_VENCIMIENTO)
-    VALUES (p_id_producto, p_nombre, p_precio, p_cantidad, p_fecha_vencimiento);
-    COMMIT;
-END CREAR_PRODUCTO;
+CREATE OR REPLACE PACKAGE ProductoPkg AS
+    PROCEDURE CrearProducto(
+        p_id_producto IN NUMBER,
+        p_nombre IN VARCHAR2,
+        p_precio IN NUMBER,
+        p_cantidad IN NUMBER,
+        p_fecha_vencimiento IN DATE
+    );
+    PROCEDURE ActualizarProducto(
+        p_id_producto IN NUMBER,
+        p_nombre IN VARCHAR2,
+        p_precio IN NUMBER,
+        p_cantidad IN NUMBER,
+        p_fecha_vencimiento IN DATE
+    );
+    PROCEDURE EliminarProducto(
+        p_id_producto IN NUMBER
+    );
+END ProductoPkg;
 /
 
--- Procedimiento para actualizar un producto
-CREATE OR REPLACE PROCEDURE ACTUALIZAR_PRODUCTO(
-    p_id_producto IN NUMBER,
-    p_nombre IN VARCHAR2,
-    p_precio IN NUMBER,
-    p_cantidad IN NUMBER,
-    p_fecha_vencimiento IN DATE
-)
-AS
-BEGIN
-    UPDATE PRODUCTO
-    SET NOMBRE = p_nombre,
-        PRECIO = p_precio,
-        CANTIDAD = p_cantidad,
-        FECHA_VENCIMIENTO = p_fecha_vencimiento
-    WHERE ID_PRODUCTO = p_id_producto;
-    COMMIT;
-END ACTUALIZAR_PRODUCTO;
+CREATE OR REPLACE PACKAGE BODY ProductoPkg AS
+    PROCEDURE CrearProducto(
+        p_id_producto IN NUMBER,
+        p_nombre IN VARCHAR2,
+        p_precio IN NUMBER,
+        p_cantidad IN NUMBER,
+        p_fecha_vencimiento IN DATE
+    ) AS
+    BEGIN
+        INSERT INTO PRODUCTO (ID_PRODUCTO, NOMBRE, PRECIO, CANTIDAD, FECHA_VENCIMIENTO)
+        VALUES (p_id_producto, p_nombre, p_precio, p_cantidad, p_fecha_vencimiento);
+        COMMIT;
+    END CrearProducto;
+
+    PROCEDURE ActualizarProducto(
+        p_id_producto IN NUMBER,
+        p_nombre IN VARCHAR2,
+        p_precio IN NUMBER,
+        p_cantidad IN NUMBER,
+        p_fecha_vencimiento IN DATE
+    ) AS
+    BEGIN
+        UPDATE PRODUCTO
+        SET NOMBRE = p_nombre,
+            PRECIO = p_precio,
+            CANTIDAD = p_cantidad,
+            FECHA_VENCIMIENTO = p_fecha_vencimiento
+        WHERE ID_PRODUCTO = p_id_producto;
+        COMMIT;
+    END ActualizarProducto;
+
+    PROCEDURE EliminarProducto(
+        p_id_producto IN NUMBER
+    ) AS
+    BEGIN
+        DELETE FROM PRODUCTO
+        WHERE ID_PRODUCTO = p_id_producto;
+        COMMIT;
+    END EliminarProducto;
+END ProductoPkg;
 /
 
--- Procedimiento para eliminar un producto
-CREATE OR REPLACE PROCEDURE ELIMINAR_PRODUCTO(
-    p_id_producto IN NUMBER
-)
-AS
-BEGIN
-    DELETE FROM PRODUCTO
-    WHERE ID_PRODUCTO = p_id_producto;
-    COMMIT;
-END ELIMINAR_PRODUCTO;
-/
 
 -- TABLA COMPRA 
 
--- Procedimiento para crear una compra
-CREATE OR REPLACE PROCEDURE CREAR_COMPRA(
-    p_id_compra IN NUMBER,
-    p_fecha IN DATE,
-    p_ganancia IN NUMBER,
-    p_id_cliente IN NUMBER,
-    p_id_producto IN NUMBER
-)
-AS
-BEGIN
-    INSERT INTO COMPRA (ID_COMPRA, FECHA, GANANCIA, ID_CLIENTE, ID_PRODUCTO)
-    VALUES (p_id_compra, p_fecha, p_ganancia, p_id_cliente, p_id_producto);
-    COMMIT;
-END CREAR_COMPRA;
+CREATE OR REPLACE PACKAGE CompraPkg AS
+    -- Procedimiento para crear una compra
+    PROCEDURE CrearCompra(
+        p_id_compra IN NUMBER,
+        p_fecha IN DATE,
+        p_ganancia IN NUMBER,
+        p_id_cliente IN NUMBER,
+        p_id_producto IN NUMBER
+    );
+    -- Procedimiento para actualizar una compra
+    PROCEDURE ActualizarCompra(
+        p_id_compra IN NUMBER,
+        p_fecha IN DATE,
+        p_ganancia IN NUMBER,
+        p_id_cliente IN NUMBER,
+        p_id_producto IN NUMBER
+    );
+    -- Procedimiento para eliminar una compra
+    PROCEDURE EliminarCompra(
+        p_id_compra IN NUMBER
+    );
+END CompraPkg;
 /
 
--- Procedimiento para actualizar una compra (Nota: Normalmente no se actualizan las compras)
-CREATE OR REPLACE PROCEDURE ACTUALIZAR_COMPRA(
-    p_id_compra IN NUMBER,
-    p_fecha IN DATE,
-    p_ganancia IN NUMBER,
-    p_id_cliente IN NUMBER,
-    p_id_producto IN NUMBER
-)
-AS
-BEGIN
-    UPDATE COMPRA
-    SET FECHA = p_fecha,
-        GANANCIA = p_ganancia,
-        ID_CLIENTE = p_id_cliente,
-        ID_PRODUCTO = p_id_producto
-    WHERE ID_COMPRA = p_id_compra;
-    COMMIT;
-END ACTUALIZAR_COMPRA;
+CREATE OR REPLACE PACKAGE BODY CompraPkg AS
+    -- Implementación del procedimiento para crear una compra
+    PROCEDURE CrearCompra(
+        p_id_compra IN NUMBER,
+        p_fecha IN DATE,
+        p_ganancia IN NUMBER,
+        p_id_cliente IN NUMBER,
+        p_id_producto IN NUMBER
+    ) AS
+    BEGIN
+        INSERT INTO COMPRA (ID_COMPRA, FECHA, GANANCIA, ID_CLIENTE, ID_PRODUCTO)
+        VALUES (p_id_compra, p_fecha, p_ganancia, p_id_cliente, p_id_producto);
+        COMMIT;
+    END CrearCompra;
+
+    -- Implementación del procedimiento para actualizar una compra
+    PROCEDURE ActualizarCompra(
+        p_id_compra IN NUMBER,
+        p_fecha IN DATE,
+        p_ganancia IN NUMBER,
+        p_id_cliente IN NUMBER,
+        p_id_producto IN NUMBER
+    ) AS
+    BEGIN
+        UPDATE COMPRA
+        SET FECHA = p_fecha,
+            GANANCIA = p_ganancia,
+            ID_CLIENTE = p_id_cliente,
+            ID_PRODUCTO = p_id_producto
+        WHERE ID_COMPRA = p_id_compra;
+        COMMIT;
+    END ActualizarCompra;
+
+    -- Implementación del procedimiento para eliminar una compra
+    PROCEDURE EliminarCompra(
+        p_id_compra IN NUMBER
+    ) AS
+    BEGIN
+        DELETE FROM COMPRA
+        WHERE ID_COMPRA = p_id_compra;
+        COMMIT;
+    END EliminarCompra;
+END CompraPkg;
 /
 
--- Procedimiento para eliminar una compra
-CREATE OR REPLACE PROCEDURE ELIMINAR_COMPRA(
-    p_id_compra IN NUMBER
-)
-AS
-BEGIN
-    DELETE FROM COMPRA
-    WHERE ID_COMPRA = p_id_compra;
-    COMMIT;
-END ELIMINAR_COMPRA;
-/
 
 -- TABLA INGREDIENTE
-
--- Procedimiento para crear un ingrediente
-CREATE OR REPLACE PROCEDURE CREAR_INGREDIENTE(
-    p_id_ingrediente IN NUMBER,
-    p_nombre IN VARCHAR2,
-    p_cantidad IN NUMBER,
-    p_precio_unitario IN NUMBER,
-    p_id_proveedor IN NUMBER
-)
-AS
-BEGIN
-    INSERT INTO INGREDIENTE (ID_INGREDIENTE, NOMBRE, CANTIDAD, PRECIO_UNITARIO, ID_PROVEEDOR)
-    VALUES (p_id_ingrediente, p_nombre, p_cantidad, p_precio_unitario, p_id_proveedor);
-    COMMIT;
-END CREAR_INGREDIENTE;
+CREATE OR REPLACE PACKAGE IngredientePkg AS
+    -- Procedimiento para crear un ingrediente
+    PROCEDURE CrearIngrediente(
+        p_id_ingrediente IN NUMBER,
+        p_nombre IN VARCHAR2,
+        p_cantidad IN NUMBER,
+        p_precio_unitario IN NUMBER,
+        p_id_proveedor IN NUMBER
+    );
+    -- Procedimiento para actualizar un ingrediente
+    PROCEDURE ActualizarIngrediente(
+        p_id_ingrediente IN NUMBER,
+        p_nombre IN VARCHAR2,
+        p_cantidad IN NUMBER,
+        p_precio_unitario IN NUMBER,
+        p_id_proveedor IN NUMBER
+    );
+    -- Procedimiento para eliminar un ingrediente
+    PROCEDURE EliminarIngrediente(
+        p_id_ingrediente IN NUMBER
+    );
+END IngredientePkg;
 /
 
--- Procedimiento para actualizar un ingrediente
-CREATE OR REPLACE PROCEDURE ACTUALIZAR_INGREDIENTE(
-    p_id_ingrediente IN NUMBER,
-    p_nombre IN VARCHAR2,
-    p_cantidad IN NUMBER,
-    p_precio_unitario IN NUMBER,
-    p_id_proveedor IN NUMBER
-)
-AS
-BEGIN
-    UPDATE INGREDIENTE
-    SET NOMBRE = p_nombre,
-        CANTIDAD = p_cantidad,
-        PRECIO_UNITARIO = p_precio_unitario,
-        ID_PROVEEDOR = p_id_proveedor
-    WHERE ID_INGREDIENTE = p_id_ingrediente;
-    COMMIT;
-END ACTUALIZAR_INGREDIENTE;
-/
+CREATE OR REPLACE PACKAGE BODY IngredientePkg AS
+    -- Implementación del procedimiento para crear un ingrediente
+    PROCEDURE CrearIngrediente(
+        p_id_ingrediente IN NUMBER,
+        p_nombre IN VARCHAR2,
+        p_cantidad IN NUMBER,
+        p_precio_unitario IN NUMBER,
+        p_id_proveedor IN NUMBER
+    ) AS
+    BEGIN
+        INSERT INTO INGREDIENTE (ID_INGREDIENTE, NOMBRE, CANTIDAD, PRECIO_UNITARIO, ID_PROVEEDOR)
+        VALUES (p_id_ingrediente, p_nombre, p_cantidad, p_precio_unitario, p_id_proveedor);
+        COMMIT;
+    END CrearIngrediente;
 
--- Procedimiento para eliminar un ingrediente
-CREATE OR REPLACE PROCEDURE ELIMINAR_INGREDIENTE(
-    p_id_ingrediente IN NUMBER
-)
-AS
-BEGIN
-    DELETE FROM INGREDIENTE
-    WHERE ID_INGREDIENTE = p_id_ingrediente;
-    COMMIT;
-END ELIMINAR_INGREDIENTE;
+    -- Implementación del procedimiento para actualizar un ingrediente
+    PROCEDURE ActualizarIngrediente(
+        p_id_ingrediente IN NUMBER,
+        p_nombre IN VARCHAR2,
+        p_cantidad IN NUMBER,
+        p_precio_unitario IN NUMBER,
+        p_id_proveedor IN NUMBER
+    ) AS
+    BEGIN
+        UPDATE INGREDIENTE
+        SET NOMBRE = p_nombre,
+            CANTIDAD = p_cantidad,
+            PRECIO_UNITARIO = p_precio_unitario,
+            ID_PROVEEDOR = p_id_proveedor
+        WHERE ID_INGREDIENTE = p_id_ingrediente;
+        COMMIT;
+    END ActualizarIngrediente;
+
+    -- Implementación del procedimiento para eliminar un ingrediente
+    PROCEDURE EliminarIngrediente(
+        p_id_ingrediente IN NUMBER
+    ) AS
+    BEGIN
+        DELETE FROM INGREDIENTE
+        WHERE ID_INGREDIENTE = p_id_ingrediente;
+        COMMIT;
+    END EliminarIngrediente;
+END IngredientePkg;
 /
 
 -- TABLA RECETA
 
--- Procedimiento para crear una receta
-CREATE OR REPLACE PROCEDURE CREAR_RECETA(
-    p_id_receta IN NUMBER,
-    p_nombre_receta IN VARCHAR2
-)
-AS
-BEGIN
-    INSERT INTO RECETA (ID_RECETA, NOMBRE_RECETA)
-    VALUES (p_id_receta, p_nombre_receta);
-    COMMIT;
-END CREAR_RECETA;
+CREATE OR REPLACE PACKAGE RecetaPkg AS
+    -- Procedimiento para crear una receta
+    PROCEDURE CrearReceta(
+        p_id_receta IN NUMBER,
+        p_nombre_receta IN VARCHAR2
+    );
+    -- Procedimiento para actualizar una receta
+    PROCEDURE ActualizarReceta(
+        p_id_receta IN NUMBER,
+        p_nombre_receta IN VARCHAR2
+    );
+    -- Procedimiento para eliminar una receta
+    PROCEDURE EliminarReceta(
+        p_id_receta IN NUMBER
+    );
+END RecetaPkg;
 /
 
--- Procedimiento para actualizar una receta
-CREATE OR REPLACE PROCEDURE ACTUALIZAR_RECETA(
-    p_id_receta IN NUMBER,
-    p_nombre_receta IN VARCHAR2
-)
-AS
-BEGIN
-    UPDATE RECETA
-    SET NOMBRE_RECETA = p_nombre_receta
-    WHERE ID_RECETA = p_id_receta;
-    COMMIT;
-END ACTUALIZAR_RECETA;
-/
+CREATE OR REPLACE PACKAGE BODY RecetaPkg AS
+    -- Implementación del procedimiento para crear una receta
+    PROCEDURE CrearReceta(
+        p_id_receta IN NUMBER,
+        p_nombre_receta IN VARCHAR2
+    ) AS
+    BEGIN
+        INSERT INTO RECETA (ID_RECETA, NOMBRE_RECETA)
+        VALUES (p_id_receta, p_nombre_receta);
+        COMMIT;
+    END CrearReceta;
 
--- Procedimiento para eliminar una receta
-CREATE OR REPLACE PROCEDURE ELIMINAR_RECETA(
-    p_id_receta IN NUMBER
-)
-AS
-BEGIN
-    DELETE FROM RECETA
-    WHERE ID_RECETA = p_id_receta;
-    COMMIT;
-END ELIMINAR_RECETA;
+    -- Implementación del procedimiento para actualizar una receta
+    PROCEDURE ActualizarReceta(
+        p_id_receta IN NUMBER,
+        p_nombre_receta IN VARCHAR2
+    ) AS
+    BEGIN
+        UPDATE RECETA
+        SET NOMBRE_RECETA = p_nombre_receta
+        WHERE ID_RECETA = p_id_receta;
+        COMMIT;
+    END ActualizarReceta;
+
+    -- Implementación del procedimiento para eliminar una receta
+    PROCEDURE EliminarReceta(
+        p_id_receta IN NUMBER
+    ) AS
+    BEGIN
+        DELETE FROM RECETA
+        WHERE ID_RECETA = p_id_receta;
+        COMMIT;
+    END EliminarReceta;
+END RecetaPkg;
 /
 
 -- TABLA INGREDIENTE_RECETA
 
--- Procedimiento para crear una relación entre ingrediente y receta
-CREATE OR REPLACE PROCEDURE CREAR_INGREDIENTE_RECETA(
-    p_id_receta IN NUMBER,
-    p_id_ingrediente IN NUMBER,
-    p_cantidad IN NUMBER
-)
-AS
-BEGIN
-    INSERT INTO INGREDIENTE_RECETA (ID_RECETA, ID_INGREDIENTE, CANTIDAD)
-    VALUES (p_id_receta, p_id_ingrediente, p_cantidad);
-    COMMIT;
-END CREAR_INGREDIENTE_RECETA;
+CREATE OR REPLACE PACKAGE IngredienteRecetaPkg AS
+    -- Procedimiento para asociar un ingrediente a una receta
+    PROCEDURE CrearIngredienteReceta(
+        p_id_receta IN NUMBER,
+        p_id_ingrediente IN NUMBER,
+        p_cantidad IN NUMBER
+    );
+    -- Procedimiento para actualizar la cantidad de un ingrediente en una receta
+    PROCEDURE ActualizarIngredienteReceta(
+        p_id_receta IN NUMBER,
+        p_id_ingrediente IN NUMBER,
+        p_cantidad IN NUMBER
+    );
+    -- Procedimiento para eliminar un ingrediente de una receta
+    PROCEDURE EliminarIngredienteReceta(
+        p_id_receta IN NUMBER,
+        p_id_ingrediente IN NUMBER
+    );
+END IngredienteRecetaPkg;
 /
 
--- Procedimiento para actualizar la cantidad de un ingrediente en una receta (Nota: Normalmente no se actualiza esta información)
-CREATE OR REPLACE PROCEDURE ACTUALIZAR_INGREDIENTE_RECETA(
-    p_id_receta IN NUMBER,
-    p_id_ingrediente IN NUMBER,
-    p_cantidad IN NUMBER
-)
-AS
-BEGIN
-    UPDATE INGREDIENTE_RECETA
-    SET CANTIDAD = p_cantidad
-    WHERE ID_RECETA = p_id_receta AND ID_INGREDIENTE = p_id_ingrediente;
-    COMMIT;
-END ACTUALIZAR_INGREDIENTE_RECETA;
-/
+CREATE OR REPLACE PACKAGE BODY IngredienteRecetaPkg AS
+    -- Implementación del procedimiento para añadir un ingrediente a una receta
+    PROCEDURE CrearIngredienteReceta(
+        p_id_receta IN NUMBER,
+        p_id_ingrediente IN NUMBER,
+        p_cantidad IN NUMBER
+    ) AS
+    BEGIN
+        INSERT INTO INGREDIENTE_RECETA (ID_RECETA, ID_INGREDIENTE, CANTIDAD)
+        VALUES (p_id_receta, p_id_ingrediente, p_cantidad);
+        COMMIT;
+    END CrearIngredienteReceta;
 
--- Procedimiento para eliminar una relación entre ingrediente y receta
-CREATE OR REPLACE PROCEDURE ELIMINAR_INGREDIENTE_RECETA(
-    p_id_receta IN NUMBER,
-    p_id_ingrediente IN NUMBER
-)
-AS
-BEGIN
-    DELETE FROM INGREDIENTE_RECETA
-    WHERE ID_RECETA = p_id_receta AND ID_INGREDIENTE = p_id_ingrediente;
-    COMMIT;
-END ELIMINAR_INGREDIENTE_RECETA;
+    -- Implementación del procedimiento para actualizar la cantidad de un ingrediente en una receta
+    PROCEDURE ActualizarIngredienteReceta(
+        p_id_receta IN NUMBER,
+        p_id_ingrediente IN NUMBER,
+        p_cantidad IN NUMBER
+    ) AS
+    BEGIN
+        UPDATE INGREDIENTE_RECETA
+        SET CANTIDAD = p_cantidad
+        WHERE ID_RECETA = p_id_receta AND ID_INGREDIENTE = p_id_ingrediente;
+        COMMIT;
+    END ActualizarIngredienteReceta;
+
+    -- Implementación del procedimiento para eliminar un ingrediente de una receta
+    PROCEDURE EliminarIngredienteReceta(
+        p_id_receta IN NUMBER,
+        p_id_ingrediente IN NUMBER
+    ) AS
+    BEGIN
+        DELETE FROM INGREDIENTE_RECETA
+        WHERE ID_RECETA = p_id_receta AND ID_INGREDIENTE = p_id_ingrediente;
+        COMMIT;
+    END EliminarIngredienteReceta;
+END IngredienteRecetaPkg;
 /
 
 -- TABLA ORDEN
 
--- Procedimiento para crear una orden
-CREATE OR REPLACE PROCEDURE CREAR_ORDEN(
-    p_id_orden IN NUMBER,
-    p_fecha_orden IN DATE,
-    p_estado_orden IN VARCHAR2,
-    p_id_cliente IN NUMBER,
-    p_id_producto IN NUMBER
-)
-AS
-BEGIN
-    INSERT INTO ORDEN (ID_ORDEN, FECHA_ORDEN, ESTADO_ORDEN, ID_CLIENTE, ID_PRODUCTO)
-    VALUES (p_id_orden, p_fecha_orden, p_estado_orden, p_id_cliente, p_id_producto);
-    COMMIT;
-END CREAR_ORDEN;
+CREATE OR REPLACE PACKAGE OrdenPkg AS
+    -- Procedimiento para crear una nueva orden
+    PROCEDURE CrearOrden(
+        p_id_orden IN NUMBER,
+        p_fecha_orden IN DATE,
+        p_estado_orden IN VARCHAR2,
+        p_id_cliente IN NUMBER,
+        p_id_producto IN NUMBER
+    );
+    -- Procedimiento para actualizar una orden existente
+    PROCEDURE ActualizarOrden(
+        p_id_orden IN NUMBER,
+        p_fecha_orden IN DATE,
+        p_estado_orden IN VARCHAR2,
+        p_id_cliente IN NUMBER,
+        p_id_producto IN NUMBER
+    );
+    -- Procedimiento para eliminar una orden
+    PROCEDURE EliminarOrden(
+        p_id_orden IN NUMBER
+    );
+END OrdenPkg;
 /
 
--- Procedimiento para actualizar una orden (Nota: Normalmente no se actualizan las órdenes)
-CREATE OR REPLACE PROCEDURE ACTUALIZAR_ORDEN(
-    p_id_orden IN NUMBER,
-    p_fecha_orden IN DATE,
-    p_estado_orden IN VARCHAR2,
-    p_id_cliente IN NUMBER,
-    p_id_producto IN NUMBER
-)
-AS
-BEGIN
-    UPDATE ORDEN
-    SET FECHA_ORDEN = p_fecha_orden,
-        ESTADO_ORDEN = p_estado_orden,
-        ID_CLIENTE = p_id_cliente,
-        ID_PRODUCTO = p_id_producto
-    WHERE ID_ORDEN = p_id_orden;
-    COMMIT;
-END ACTUALIZAR_ORDEN;
+CREATE OR REPLACE PACKAGE BODY OrdenPkg AS
+    -- Implementación del procedimiento para crear una orden
+    PROCEDURE CrearOrden(
+        p_id_orden IN NUMBER,
+        p_fecha_orden IN DATE,
+        p_estado_orden IN VARCHAR2,
+        p_id_cliente IN NUMBER,
+        p_id_producto IN NUMBER
+    ) AS
+    BEGIN
+        INSERT INTO ORDEN (ID_ORDEN, FECHA_ORDEN, ESTADO_ORDEN, ID_CLIENTE, ID_PRODUCTO)
+        VALUES (p_id_orden, p_fecha_orden, p_estado_orden, p_id_cliente, p_id_producto);
+        COMMIT;
+    END CrearOrden;
+
+    -- Implementación del procedimiento para actualizar una orden
+    PROCEDURE ActualizarOrden(
+        p_id_orden IN NUMBER,
+        p_fecha_orden IN DATE,
+        p_estado_orden IN VARCHAR2,
+        p_id_cliente IN NUMBER,
+        p_id_producto IN NUMBER
+    ) AS
+    BEGIN
+        UPDATE ORDEN
+        SET FECHA_ORDEN = p_fecha_orden,
+            ESTADO_ORDEN = p_estado_orden,
+            ID_CLIENTE = p_id_cliente,
+            ID_PRODUCTO = p_id_producto
+        WHERE ID_ORDEN = p_id_orden;
+        COMMIT;
+    END ActualizarOrden;
+
+    -- Implementación del procedimiento para eliminar una orden
+    PROCEDURE EliminarOrden(
+        p_id_orden IN NUMBER
+    ) AS
+    BEGIN
+        DELETE FROM ORDEN
+        WHERE ID_ORDEN = p_id_orden;
+        COMMIT;
+    END EliminarOrden;
+END OrdenPkg;
 /
 
--- Procedimiento para eliminar una orden
-CREATE OR REPLACE PROCEDURE ELIMINAR_ORDEN(
-    p_id_orden IN NUMBER
-)
-AS
-BEGIN
-    DELETE FROM ORDEN
-    WHERE ID_ORDEN = p_id_orden;
-    COMMIT;
-END ELIMINAR_ORDEN;
+--TABLA EMPLEADOS 
+CREATE OR REPLACE PACKAGE EmpleadoPkg AS
+    -- Procedimiento para crear un nuevo empleado
+    PROCEDURE CrearEmpleado(
+        p_id_empleado IN NUMBER,
+        p_nombre IN VARCHAR2,
+        p_apellido IN VARCHAR2,
+        p_puesto IN VARCHAR2,
+        p_salario IN NUMBER,
+        p_fecha_contratacion IN DATE,
+        p_id_departamento IN NUMBER
+    );
+    -- Procedimiento para actualizar un empleado existente
+    PROCEDURE ActualizarEmpleado(
+        p_id_empleado IN NUMBER,
+        p_nombre IN VARCHAR2,
+        p_apellido IN VARCHAR2,
+        p_puesto IN VARCHAR2,
+        p_salario IN NUMBER,
+        p_fecha_contratacion IN DATE,
+        p_id_departamento IN NUMBER
+    );
+    -- Procedimiento para eliminar un empleado
+    PROCEDURE EliminarEmpleado(
+        p_id_empleado IN NUMBER
+    );
+END EmpleadoPkg;
 /
 
+CREATE OR REPLACE PACKAGE BODY EmpleadoPkg AS
+    -- Implementación del procedimiento para crear un empleado
+    PROCEDURE CrearEmpleado(
+        p_id_empleado IN NUMBER,
+        p_nombre IN VARCHAR2,
+        p_apellido IN VARCHAR2,
+        p_puesto IN VARCHAR2,
+        p_salario IN NUMBER,
+        p_fecha_contratacion IN DATE,
+        p_id_departamento IN NUMBER
+    ) AS
+    BEGIN
+        INSERT INTO EMPLEADO (ID_EMPLEADO, NOMBRE, APELLIDO, PUESTO, SALARIO, FECHA_CONTRATACION, ID_DEPARTAMENTO)
+        VALUES (p_id_empleado, p_nombre, p_apellido, p_puesto, p_salario, p_fecha_contratacion, p_id_departamento);
+        COMMIT;
+    END CrearEmpleado;
 
+    -- Implementación del procedimiento para actualizar un empleado
+    PROCEDURE ActualizarEmpleado(
+        p_id_empleado IN NUMBER,
+        p_nombre IN VARCHAR2,
+        p_apellido IN VARCHAR2,
+        p_puesto IN VARCHAR2,
+        p_salario IN NUMBER,
+        p_fecha_contratacion IN DATE,
+        p_id_departamento IN NUMBER
+    ) AS
+    BEGIN
+        UPDATE EMPLEADO
+        SET NOMBRE = p_nombre,
+            APELLIDO = p_apellido,
+            PUESTO = p_puesto,
+            SALARIO = p_salario,
+            FECHA_CONTRATACION = p_fecha_contratacion,
+            ID_DEPARTAMENTO = p_id_departamento
+        WHERE ID_EMPLEADO = p_id_empleado;
+        COMMIT;
+    END ActualizarEmpleado;
 
+    -- Implementación del procedimiento para eliminar un empleado
+    PROCEDURE EliminarEmpleado(
+        p_id_empleado IN NUMBER
+    ) AS
+    BEGIN
+        DELETE FROM EMPLEADO
+        WHERE ID_EMPLEADO = p_id_empleado;
+        COMMIT;
+    END EliminarEmpleado;
+END EmpleadoPkg;
+/
 
 -- Vistas
+
+--Vista para ver la informacion completa de los proveedores
+CREATE OR REPLACE VIEW V_PROVEEDORES AS
+SELECT *
+FROM PROVEEDOR;
 
 -- Vista para mostrar la información completa de los clientes
 CREATE OR REPLACE VIEW V_CLIENTES AS
@@ -581,151 +822,658 @@ JOIN RECETA R ON IR.ID_RECETA = R.ID_RECETA;
 
 
 -- Funciones
-CREATE OR REPLACE FUNCTION CONSULTAR_INGREDIENTES(
+create or replace NONEDITIONABLE FUNCTION CONSULTAR_INGREDIENTES(
     p_nombre_ingrediente IN VARCHAR2
 ) RETURN VARCHAR2
 IS
-    v_info_ingrediente VARCHAR2(4000);
+    CURSOR c_ingredientes IS
+        SELECT i.CANTIDAD, i.PRECIO_UNITARIO, p.NOMBRE AS PROVEEDOR_NOMBRE
+        FROM INGREDIENTE i
+        INNER JOIN PROVEEDOR p ON i.ID_PROVEEDOR = p.ID_PROVEEDOR
+        WHERE UPPER(i.NOMBRE) = UPPER(p_nombre_ingrediente);
+        
+    v_cantidad NUMBER;
+    v_precio_unitario NUMBER;
+    v_proveedor_nombre VARCHAR2(100);
+    v_info_ingrediente VARCHAR2(4000) := '';
 BEGIN
-    -- Buscar la información del ingrediente
-    SELECT 'Cantidad: ' || i.CANTIDAD || ', Precio unitario: ' || i.PRECIO_UNITARIO || ', Proveedor: ' || p.NOMBRE
-    INTO v_info_ingrediente
-    FROM INGREDIENTE i
-    INNER JOIN PROVEEDOR p ON i.ID_PROVEEDOR = p.ID_PROVEEDOR
-    WHERE i.NOMBRE = p_nombre_ingrediente;
-
-    RETURN v_info_ingrediente;
-EXCEPTION
-    WHEN NO_DATA_FOUND THEN
+    OPEN c_ingredientes;
+    LOOP
+        FETCH c_ingredientes INTO v_cantidad, v_precio_unitario, v_proveedor_nombre;
+        EXIT WHEN c_ingredientes%NOTFOUND;
+        v_info_ingrediente := v_info_ingrediente || 'Cantidad: ' || v_cantidad ||
+                              ', Precio unitario: ' || v_precio_unitario ||
+                              ', Proveedor: ' || v_proveedor_nombre || CHR(10);
+    END LOOP;
+    CLOSE c_ingredientes;
+    
+    IF v_info_ingrediente IS NULL THEN
         RETURN 'No se encontró ningún ingrediente con ese nombre.';
+    ELSE
+        RETURN v_info_ingrediente;
+    END IF;
+EXCEPTION
     WHEN OTHERS THEN
-        RETURN 'Ocurrió un error al procesar la solicitud.';
+        IF c_ingredientes%ISOPEN THEN
+            CLOSE c_ingredientes;
+        END IF;
+        RETURN 'Ocurrió un error al procesar la solicitud: ' || SQLERRM;
 END CONSULTAR_INGREDIENTES;
-/
 
-CREATE OR REPLACE FUNCTION MOSTRAR_ORDEN_POR_CLIENTE (
+create or replace NONEDITIONABLE FUNCTION CONTAR_VENTAS_POR_PRODUCTO (
+    nombre_producto IN VARCHAR2
+) RETURN VARCHAR2
+AS
+    v_resultado VARCHAR2(4000) := '';
+    -- Declarando todas las variables necesarias
+    v_producto_id PRODUCTO.ID_PRODUCTO%TYPE;
+    v_nombre_producto PRODUCTO.NOMBRE%TYPE;
+    v_total_ventas NUMBER;
+    
+    CURSOR c_productos IS
+        SELECT p.ID_PRODUCTO, p.NOMBRE, COUNT(c.ID_COMPRA) AS TOTAL_VENTAS
+        FROM PRODUCTO p
+        LEFT JOIN COMPRA c ON p.ID_PRODUCTO = c.ID_PRODUCTO
+        WHERE UPPER(p.NOMBRE) = UPPER(nombre_producto)
+        GROUP BY p.ID_PRODUCTO, p.NOMBRE;
+BEGIN
+    OPEN c_productos;
+    FETCH c_productos INTO v_producto_id, v_nombre_producto, v_total_ventas;
+    WHILE c_productos%FOUND LOOP
+        v_resultado := v_resultado || 
+                       'Producto ID: ' || v_producto_id || 
+                       ', Nombre: ' || v_nombre_producto || 
+                       ', Total de Ventas: ' || v_total_ventas || CHR(10);
+        FETCH c_productos INTO v_producto_id, v_nombre_producto, v_total_ventas;
+    END LOOP;
+    CLOSE c_productos;
+
+    IF v_resultado IS NULL OR v_resultado = '' THEN
+        v_resultado := 'No se encontraron ventas para productos con el nombre ' || nombre_producto || '.';
+    END IF;
+
+    RETURN v_resultado;
+EXCEPTION
+    WHEN OTHERS THEN
+        IF c_productos%ISOPEN THEN
+            CLOSE c_productos;
+        END IF;
+        RETURN 'Ocurrió un error al procesar la solicitud: ' || SQLERRM;
+END CONTAR_VENTAS_POR_PRODUCTO;
+
+create or replace NONEDITIONABLE FUNCTION LISTAR_PRODUCTOS_BAJO_STOCK RETURN VARCHAR2
+AS
+    v_resultado VARCHAR2(4000) := '';
+    CURSOR c_productos IS
+        SELECT ID_PRODUCTO, NOMBRE, CANTIDAD
+        FROM PRODUCTO
+        WHERE CANTIDAD < 4;
+BEGIN
+    OPEN c_productos;
+    FOR producto_rec IN c_productos LOOP
+        v_resultado := v_resultado ||
+                       'Producto ID: ' || producto_rec.ID_PRODUCTO || 
+                       ', Nombre: ' || producto_rec.NOMBRE || 
+                       ', Cantidad: ' || producto_rec.CANTIDAD || CHR(10);
+    END LOOP;
+    CLOSE c_productos;
+
+    IF v_resultado IS NULL OR v_resultado = '' THEN
+        v_resultado := 'Todos los productos tienen suficiente stock.';
+    ELSE
+        v_resultado := 'Productos con bajo stock:' || CHR(10) || v_resultado;
+    END IF;
+
+    RETURN v_resultado;
+END LISTAR_PRODUCTOS_BAJO_STOCK;
+
+create or replace NONEDITIONABLE FUNCTION MOSTRAR_EMPLEADOS_POR_DEPARTAMENTO RETURN VARCHAR2
+AS
+    v_resultado VARCHAR2(4000) := ''; -- Inicializa la variable para evitar valores NULL
+    CURSOR c_deptos IS
+        SELECT D.NOMBRE AS DEPARTAMENTO, 
+               COUNT(E.ID_EMPLEADO) AS CANTIDAD_EMPLEADOS,
+               NVL(SUM(E.SALARIO), 0) AS TOTAL_SALARIOS -- Usa NVL para manejar departamentos sin empleados
+        FROM DEPARTAMENTO D
+        LEFT JOIN EMPLEADO E ON D.ID_DEPARTAMENTO = E.ID_DEPARTAMENTO
+        GROUP BY D.NOMBRE;
+
+    v_dept_info c_deptos%ROWTYPE;
+BEGIN
+    OPEN c_deptos;
+    FETCH c_deptos INTO v_dept_info;
+    WHILE c_deptos%FOUND LOOP
+        v_resultado := v_resultado || 
+                       'Departamento: ' || v_dept_info.DEPARTAMENTO || 
+                       ', Cantidad de empleados: ' || v_dept_info.CANTIDAD_EMPLEADOS || 
+                       ', Total en salarios: $' || TO_CHAR(v_dept_info.TOTAL_SALARIOS, 'FM999,999,999') || CHR(10);
+        FETCH c_deptos INTO v_dept_info;
+    END LOOP;
+    CLOSE c_deptos;
+
+    IF v_resultado IS NULL OR v_resultado = '' THEN
+        v_resultado := 'No hay información disponible.';
+    END IF;
+
+    RETURN v_resultado;
+EXCEPTION
+    WHEN OTHERS THEN
+        IF c_deptos%ISOPEN THEN
+            CLOSE c_deptos;
+        END IF;
+        RETURN 'Ocurrió un error al procesar la solicitud: ' || SQLERRM;
+END MOSTRAR_EMPLEADOS_POR_DEPARTAMENTO;
+
+create or replace NONEDITIONABLE FUNCTION MOSTRAR_ORDEN_POR_CLIENTE (
     nombre_cliente IN VARCHAR2
 ) RETURN VARCHAR2
 AS
-    v_resultado VARCHAR2(4000); -- Se asume que la longitud máxima del resultado es de 4000 caracteres
-BEGIN
-    -- Obtener el ID del cliente basado en su nombre
-    DECLARE
-        v_cliente_id CLIENTE.ID_CLIENTE%TYPE;
-    BEGIN
-        SELECT ID_CLIENTE INTO v_cliente_id
+    v_resultado VARCHAR2(32000) := '';  -- Aumentar capacidad si es necesario
+    CURSOR c_clientes IS
+        SELECT ID_CLIENTE
         FROM CLIENTE
         WHERE UPPER(NOMBRE) = UPPER(nombre_cliente);
-    EXCEPTION
-        WHEN NO_DATA_FOUND THEN
-            RETURN 'El cliente ' || nombre_cliente || ' no tiene órdenes.';
-    END;
+    v_cliente_id CLIENTE.ID_CLIENTE%TYPE;
+BEGIN
+    OPEN c_clientes;
+    LOOP
+        FETCH c_clientes INTO v_cliente_id;
+        EXIT WHEN c_clientes%NOTFOUND;
 
-    -- Mostrar las órdenes del cliente
-    FOR orden_rec IN (SELECT ORDEN.ID_ORDEN, ORDEN.FECHA_ORDEN, ORDEN.ESTADO_ORDEN, ORDEN.ID_PRODUCTO, PRODUCTO.NOMBRE AS NOMBRE_PRODUCTO
-                      FROM ORDEN
-                      JOIN PRODUCTO ON ORDEN.ID_PRODUCTO = PRODUCTO.ID_PRODUCTO
-                      WHERE ORDEN.ID_CLIENTE = v_cliente_id) LOOP
-        v_resultado := v_resultado || 'ID de Orden: ' || orden_rec.ID_ORDEN || ', Fecha de Orden: ' || TO_CHAR(orden_rec.FECHA_ORDEN, 'DD-MON-YYYY') || ', Estado de Orden: ' || orden_rec.ESTADO_ORDEN || ', ID de Producto: ' || orden_rec.ID_PRODUCTO || ', Nombre del Producto: ' || orden_rec.NOMBRE_PRODUCTO || CHR(10);
+        -- Procesar cada orden del cliente encontrado
+        FOR orden_rec IN (
+            SELECT o.ID_ORDEN, o.FECHA_ORDEN, o.ESTADO_ORDEN, o.ID_PRODUCTO, p.NOMBRE AS NOMBRE_PRODUCTO
+            FROM ORDEN o
+            JOIN PRODUCTO p ON o.ID_PRODUCTO = p.ID_PRODUCTO
+            WHERE o.ID_CLIENTE = v_cliente_id
+        ) LOOP
+            v_resultado := v_resultado || 
+                           'Cliente ID: ' || v_cliente_id || ' - ' ||
+                           'ID de Orden: ' || orden_rec.ID_ORDEN || 
+                           ', Fecha de Orden: ' || TO_CHAR(orden_rec.FECHA_ORDEN, 'DD-MON-YYYY') || 
+                           ', Estado de Orden: ' || orden_rec.ESTADO_ORDEN || 
+                           ', ID de Producto: ' || orden_rec.ID_PRODUCTO || 
+                           ', Nombre del Producto: ' || orden_rec.NOMBRE_PRODUCTO || CHR(10);
+        END LOOP;
+
+        -- Agregar separación entre clientes si es necesario
+        v_resultado := v_resultado || CHR(10) || '---' || CHR(10);
     END LOOP;
+    CLOSE c_clientes;
+
+    IF v_resultado IS NULL THEN
+        v_resultado := 'No se encontró ningún cliente o ordenes con el nombre ' || nombre_cliente || '.';
+    END IF;
 
     RETURN v_resultado;
+EXCEPTION
+    WHEN OTHERS THEN
+        IF c_clientes%ISOPEN THEN
+            CLOSE c_clientes;
+        END IF;
+        RETURN 'Ocurrió un error al procesar la solicitud: ' || SQLERRM;
 END MOSTRAR_ORDEN_POR_CLIENTE;
-/
 
-CREATE OR REPLACE FUNCTION OBTENER_EMPLEADO_POR_NOMBRE (
+create or replace NONEDITIONABLE FUNCTION NUMERO_TOTAL_COMPRAS_POR_CLIENTE (
+    nombre_cliente IN VARCHAR2
+) RETURN VARCHAR2
+AS
+    v_resultado VARCHAR2(4000) := '';
+    CURSOR c_clientes IS
+        SELECT cl.ID_CLIENTE, cl.NOMBRE, cl.APELLIDO, COUNT(c.ID_COMPRA) AS TOTAL_COMPRAS
+        FROM CLIENTE cl
+        LEFT JOIN COMPRA c ON cl.ID_CLIENTE = c.ID_CLIENTE
+        WHERE UPPER(cl.NOMBRE) = UPPER(nombre_cliente)
+        GROUP BY cl.ID_CLIENTE, cl.NOMBRE, cl.APELLIDO;
+BEGIN
+    FOR cliente_rec IN c_clientes LOOP
+        v_resultado := v_resultado ||
+                       'Cliente: ' || cliente_rec.NOMBRE || ' ' || cliente_rec.APELLIDO ||
+                       ', Total de Compras: ' || cliente_rec.TOTAL_COMPRAS || CHR(10);
+    END LOOP;
+
+    IF v_resultado IS NULL OR v_resultado = '' THEN
+        v_resultado := 'No se encontraron clientes con el nombre ' || nombre_cliente || '.';
+    END IF;
+
+    RETURN v_resultado;
+EXCEPTION
+    WHEN OTHERS THEN
+        RETURN 'Ocurrió un error al procesar la solicitud: ' || SQLERRM;
+END NUMERO_TOTAL_COMPRAS_POR_CLIENTE;
+
+create or replace NONEDITIONABLE FUNCTION OBTENER_COMPRAS_POR_FECHA (
+    fecha_inicio IN DATE,
+    fecha_fin IN DATE
+) RETURN VARCHAR2
+AS
+    -- Declara una variable para almacenar los resultados
+    v_resultado VARCHAR2(4000) := '';
+    -- Define el tipo de datos para la variable que almacenará los registros del cursor
+    TYPE compra_rec_type IS RECORD (
+        ID_COMPRA COMPRA.ID_COMPRA%TYPE,
+        FECHA COMPRA.FECHA%TYPE,
+        ID_CLIENTE COMPRA.ID_CLIENTE%TYPE,
+        ID_PRODUCTO COMPRA.ID_PRODUCTO%TYPE
+    );
+    v_compra compra_rec_type;
+    CURSOR c_compras IS
+        SELECT ID_COMPRA, FECHA, ID_CLIENTE, ID_PRODUCTO
+        FROM COMPRA
+        WHERE FECHA BETWEEN fecha_inicio AND fecha_fin;
+BEGIN
+    OPEN c_compras;
+    FETCH c_compras INTO v_compra;
+    WHILE c_compras%FOUND LOOP
+        v_resultado := v_resultado || 
+                       'Compra ID: ' || v_compra.ID_COMPRA || 
+                       ', Fecha: ' || TO_CHAR(v_compra.FECHA, 'DD-MM-YYYY') ||
+                       ', Cliente ID: ' || v_compra.ID_CLIENTE ||
+                       ', Producto ID: ' || v_compra.ID_PRODUCTO || CHR(10);
+        FETCH c_compras INTO v_compra;
+    END LOOP;
+    CLOSE c_compras;
+
+    IF v_resultado IS NULL OR v_resultado = '' THEN
+        v_resultado := 'No se encontraron compras para el rango de fechas dado.';
+    END IF;
+
+    RETURN v_resultado;
+EXCEPTION
+    WHEN OTHERS THEN
+        IF c_compras%ISOPEN THEN
+            CLOSE c_compras;
+        END IF;
+        RETURN 'Ocurrió un error al procesar la solicitud: ' || SQLERRM;
+END OBTENER_COMPRAS_POR_FECHA;
+
+create or replace NONEDITIONABLE FUNCTION OBTENER_EMPLEADO_POR_NOMBRE (
     nombre_empleado IN VARCHAR2
 ) RETURN VARCHAR2
 AS
-    v_resultado VARCHAR2(4000);
+    CURSOR c_empleados IS
+        SELECT e.ID_EMPLEADO, e.NOMBRE, e.APELLIDO, e.PUESTO, e.SALARIO, e.FECHA_CONTRATACION, d.NOMBRE AS NOMBRE_DEPARTAMENTO
+        FROM EMPLEADO e
+        INNER JOIN DEPARTAMENTO d ON e.ID_DEPARTAMENTO = d.ID_DEPARTAMENTO
+        WHERE UPPER(e.NOMBRE) = UPPER(nombre_empleado);
+
+    v_empleado_id EMPLEADO.ID_EMPLEADO%TYPE;
+    v_nombre EMPLEADO.NOMBRE%TYPE;
+    v_apellido EMPLEADO.APELLIDO%TYPE;
+    v_puesto EMPLEADO.PUESTO%TYPE;
+    v_salario EMPLEADO.SALARIO%TYPE;
+    v_fecha_contratacion EMPLEADO.FECHA_CONTRATACION%TYPE;
+    v_nombre_departamento DEPARTAMENTO.NOMBRE%TYPE;
+    v_resultado VARCHAR2(4000) := '';
 BEGIN
-    -- Obtener el ID del empleado basado en su nombre
-    DECLARE
-        v_empleado_id EMPLEADO.ID_EMPLEADO%TYPE;
-        v_departamento_nombre DEPARTAMENTO.NOMBRE%TYPE;
-    BEGIN
-        SELECT ID_EMPLEADO INTO v_empleado_id
-        FROM EMPLEADO
-        WHERE UPPER(NOMBRE) = UPPER(nombre_empleado);
-    EXCEPTION
-        WHEN NO_DATA_FOUND THEN
-            RETURN 'No se encontró ningún empleado con el nombre ' || nombre_empleado;
-    END;
-
-    -- Obtener los detalles del empleado
-    SELECT e.ID_EMPLEADO || ', ' || e.NOMBRE || ', ' || e.APELLIDO || ', ' || e.PUESTO || ', ' || e.SALARIO || ', ' || TO_CHAR(e.FECHA_CONTRATACION, 'DD-MON-YYYY') || ', ' || d.NOMBRE
-    INTO v_resultado
-    FROM EMPLEADO e
-    INNER JOIN DEPARTAMENTO d ON e.ID_DEPARTAMENTO = d.ID_DEPARTAMENTO
-    WHERE e.ID_EMPLEADO = v_empleado_id;
-
-    RETURN v_resultado;
-END OBTENER_EMPLEADO_POR_NOMBRE;
-/
-
-CREATE OR REPLACE FUNCTION NUMERO_TOTAL_COMPRAS_POR_CLIENTE (
-    nombre_cliente IN VARCHAR2
-) RETURN NUMBER
-AS
-    v_cliente_id CLIENTE.ID_CLIENTE%TYPE;
-    v_total_compras NUMBER;
-BEGIN
-    -- Obtener el ID del cliente basado en su nombre
-    SELECT ID_CLIENTE INTO v_cliente_id
-    FROM CLIENTE
-    WHERE UPPER(NOMBRE) = UPPER(nombre_cliente);
-
-    -- Contar el número total de compras del cliente
-    SELECT COUNT(*) INTO v_total_compras
-    FROM COMPRA
-    WHERE ID_CLIENTE = v_cliente_id;
-
-    RETURN v_total_compras;
-EXCEPTION
-    WHEN NO_DATA_FOUND THEN
-        RETURN NULL;
-END NUMERO_TOTAL_COMPRAS_POR_CLIENTE;
-/
-
-CREATE OR REPLACE FUNCTION CONTAR_VENTAS_POR_PRODUCTO (
-    nombre_producto IN VARCHAR2
-) RETURN NUMBER
-AS
-    v_producto_id PRODUCTO.ID_PRODUCTO%TYPE;
-    v_cantidad_ventas NUMBER;
-BEGIN
-    -- Obtener el ID del producto basado en su nombre
-    SELECT ID_PRODUCTO INTO v_producto_id
-    FROM PRODUCTO
-    WHERE UPPER(NOMBRE) = UPPER(nombre_producto);
-
-    -- Contar el número total de ventas del producto
-    SELECT COUNT(*) INTO v_cantidad_ventas
-    FROM COMPRA
-    WHERE ID_PRODUCTO = v_producto_id;
-
-    RETURN v_cantidad_ventas;
-EXCEPTION
-    WHEN NO_DATA_FOUND THEN
-        RETURN NULL;
-END CONTAR_VENTAS_POR_PRODUCTO;
-/
-
-CREATE OR REPLACE FUNCTION MOSTRAR_EMPLEADOS_POR_DEPARTAMENTO RETURN VARCHAR2
-AS
-    v_resultado VARCHAR2(4000); 
-BEGIN
-    FOR dept IN (SELECT D.NOMBRE AS DEPARTAMENTO, COUNT(E.ID_EMPLEADO) AS CANTIDAD_EMPLEADOS
-                 FROM DEPARTAMENTO D
-                 LEFT JOIN EMPLEADO E ON D.ID_DEPARTAMENTO = E.ID_DEPARTAMENTO
-                 GROUP BY D.NOMBRE) LOOP
-        v_resultado := v_resultado || 'Departamento: ' || dept.DEPARTAMENTO || ', Cantidad de empleados: ' || dept.CANTIDAD_EMPLEADOS || CHR(10);
+    OPEN c_empleados;
+    LOOP
+        FETCH c_empleados INTO v_empleado_id, v_nombre, v_apellido, v_puesto, v_salario, v_fecha_contratacion, v_nombre_departamento;
+        EXIT WHEN c_empleados%NOTFOUND;
+        v_resultado := v_resultado || 
+                       v_empleado_id || ', ' || 
+                       NVL(v_nombre, 'Sin nombre') || ', ' || 
+                       NVL(v_apellido, 'Sin apellido') || ', ' || 
+                       NVL(v_puesto, 'Sin puesto') || ', ' || 
+                       NVL(TO_CHAR(v_salario), 'Sin salario') || ', ' || 
+                       TO_CHAR(v_fecha_contratacion, 'DD-MON-YYYY') || ', ' || 
+                       NVL(v_nombre_departamento, 'Sin departamento') || CHR(10);
     END LOOP;
+    CLOSE c_empleados;
 
-    RETURN v_resultado;
-END MOSTRAR_EMPLEADOS_POR_DEPARTAMENTO;
+    IF v_resultado IS NULL THEN
+        RETURN 'No se encontró ningún empleado con el nombre ' || nombre_empleado;
+    ELSE
+        RETURN v_resultado;
+    END IF;
+EXCEPTION
+    WHEN OTHERS THEN
+        IF c_empleados%ISOPEN THEN
+            CLOSE c_empleados;
+        END IF;
+        RETURN 'Ocurrió un error al procesar la solicitud: ' || SQLERRM;
+END OBTENER_EMPLEADO_POR_NOMBRE;
+
+/*
+En esta función se devuelve una cadena de caracteres que contiene la lista de proveedores y la cantidad de productos que suministran cada uno.
+No se le ingresa ninguno, y retorna los valores en un VARCHAR2
+*/
+
+CREATE OR REPLACE FUNCTION obtener_productos_por_proveedor RETURN VARCHAR2 AS
+    v_resultado VARCHAR2(1000); -- Variable para almacenar el resultado
+    CURSOR v_cursor IS -- Cursor para recuperar la información de los proveedores y la cantidad de productos
+        SELECT PR.NOMBRE, COUNT(*) AS CANTIDAD_PRODUCTOS
+        FROM PROVEEDOR PR
+        INNER JOIN INGREDIENTE I ON PR.ID_PROVEEDOR = I.ID_PROVEEDOR
+        GROUP BY PR.NOMBRE;
+    v_nombre_producto PROVEEDOR.NOMBRE%TYPE;
+    v_cantidad_productos NUMBER;
+BEGIN
+    v_resultado := ''; -- Inicializa el resultado
+    -- Bucle FOR para repetir los resultados del cursor y construir la cadena de caracteres en el resultado
+    FOR rec IN v_cursor LOOP
+        v_resultado := v_resultado || 'Proveedor: ' || rec.NOMBRE || ', Cantidad de Productos: ' || rec.CANTIDAD_PRODUCTOS || CHR(10); -- CHR(10) es un salto de línea
+    END LOOP;
+    RETURN v_resultado; -- Devuelve la cadena de resultado
+END;
 /
 
+SELECT obtener_productos_por_proveedor1() FROM dual;
+----------------------------------------------------
+/*
+Esta función devuelve el total de ventas para un mes y año específico.
+En los Parámetros Utilizamos:
+- p_mes (IN NUMBER): Aqui colocamos el número del mes para el cual se desea calcular el total de ventas.
+- p_anio (IN NUMBER): Aqui colocamos el año para el cual se desea calcular el total de ventas.
+Retorna el resultado por medio de un  NUMBER
+*/
+
+CREATE OR REPLACE FUNCTION calcular_total_ventas_mes_anio1(p_mes IN NUMBER, p_anio IN NUMBER) RETURN NUMBER AS
+    v_total_ventas NUMBER := 0; -- Variable para almacenar el total de ventas
+    CURSOR v_cursor IS -- Cursor para recuperar el total de ventas para el mes y año especificados
+        SELECT SUM(GANANCIA) AS total_ventas
+        FROM COMPRA 
+        WHERE EXTRACT(MONTH FROM FECHA) = p_mes AND EXTRACT(YEAR FROM FECHA) = p_anio;
+BEGIN
+    OPEN v_cursor; -- Se abre el cursor
+    FETCH v_cursor INTO v_total_ventas; -- Se obtiene el total de ventas
+    CLOSE v_cursor; -- Se cierra el cursor
+    
+    RETURN v_total_ventas; -- Se devuelve el total de ventas
+END;
+/
+
+-- Comando para ejecutar la función y mostrar el resultado
+SELECT calcular_total_ventas_mes_anio1(1, 2024) FROM dual;
+--------------------------------------------------------
+/*
+En esta función se devuelve una lista de clientes que han realizado más de 3 compras.
+Se retorna la informacion por medio de un VARCHAR2
+*/
+
+CREATE OR REPLACE FUNCTION obtener_clientes_mas_3_compras1 RETURN VARCHAR2 AS
+    v_resultado VARCHAR2(2000); -- Variable para almacenar el resultado
+    CURSOR v_cursor IS -- Cursor para recuperar los clientes que han realizado más de 3 compras
+        SELECT C.ID_CLIENTE
+        FROM CLIENTE C
+        WHERE (SELECT COUNT(*) FROM COMPRA WHERE ID_CLIENTE = C.ID_CLIENTE) > 3;
+    v_id_cliente CLIENTE.ID_CLIENTE%TYPE;
+BEGIN
+    v_resultado := ''; -- Inicializa el resultado
+    OPEN v_cursor; -- Se abre el cursor
+    LOOP
+        FETCH v_cursor INTO v_id_cliente;
+        EXIT WHEN v_cursor%NOTFOUND; -- Se sale del bucle cuando no hay más datos
+        -- Se construye la cadena de resultado con la información de cada cliente
+        v_resultado := v_resultado || 'Cliente ID: ' || v_id_cliente || ' tiene más de 3 compras realizadas.' || CHR(10); -- CHR(10) es un salto de línea
+    END LOOP;
+    CLOSE v_cursor; -- Se cierra el cursor
+    RETURN v_resultado; -- Se devuelve la cadena de resultado
+END;
+/
+
+-- Comando para ejecutar la función y mostrar el resultado
+SELECT obtener_clientes_mas_3_compras1() FROM dual;
+-------------------------------------------------------
+/*
+Esta función devuelve una lista de ID de clientes que tienen órdenes pendientes.
+Se devuelve la informacion por medio de un VARCHAR2
+*/
+
+CREATE OR REPLACE FUNCTION obtener_ordenes_pendientes1 RETURN VARCHAR2 AS
+    v_resultado VARCHAR2(2000); -- Variable para almacenar el resultado
+    CURSOR v_cursor IS -- Cursor para recuperar los IDs de clientes con órdenes pendientes
+        SELECT ID_CLIENTE
+        FROM ORDEN
+        WHERE ESTADO_ORDEN = 'Pendiente';
+    v_id_cliente ORDEN.ID_CLIENTE%TYPE;
+BEGIN
+    v_resultado := ''; -- Inicializa el resultado
+    OPEN v_cursor; -- Se abre el cursor
+    LOOP
+        FETCH v_cursor INTO v_id_cliente;
+        EXIT WHEN v_cursor%NOTFOUND; -- Se sale del bucle cuando no hay más datos
+        -- Se construye la cadena de resultado con la información de cada cliente
+        v_resultado := v_resultado || 'ID de orden pendiente: ' || v_id_cliente || CHR(10); -- CHR(10) es un salto de línea
+    END LOOP;
+    CLOSE v_cursor; -- Se cierra el cursor
+    RETURN v_resultado; -- Se devuelve la cadena de resultado
+END;
+/
+
+-- Comando para ejecutar la función y mostrar el resultado
+SELECT obtener_ordenes_pendientes1() FROM dual;
+--------------------------------------------
+/*
+La siguiente función calcula el total de ingredientes para una receta específica.
+Se emplearon como parámetros:
+- p_receta_id (IN NUMBER): Aqui se ingresa el ID de la receta para la cual se desea calcular el total de ingredientes.
+Se retorna por medio de un NUMBER
+*/
+
+CREATE OR REPLACE FUNCTION calcular_total_ingredientes_receta1(p_receta_id IN NUMBER) RETURN NUMBER AS
+    v_total_ingredientes NUMBER := 0; -- Variable para almacenar el total de ingredientes
+    CURSOR v_cursor IS -- Cursor para contar los ingredientes de la receta especificada
+        SELECT COUNT(*) AS total_ingredientes FROM INGREDIENTE_RECETA WHERE ID_RECETA = p_receta_id;
+BEGIN
+    OPEN v_cursor; -- Se abre el cursor
+    FETCH v_cursor INTO v_total_ingredientes; -- Se obtiene el total de ingredientes
+    CLOSE v_cursor; -- Se cierra el cursor
+    
+    RETURN v_total_ingredientes; -- Se devuelve el total de ingredientes
+END;
+/
+
+-- Comando para ejecutar la función y mostrar el resultado
+SELECT calcular_total_ingredientes_receta1  (1) FROM dual;
+------------------------------------------
+/*
+La función devuelve una lista de recetas con sus respectivos ingredientes y cantidades.
+Se devuelve por un VARCHAR2
+*/
+
+CREATE OR REPLACE FUNCTION obtener_recetas_con_ingredientes1 RETURN VARCHAR2 AS
+    v_resultado VARCHAR2(4000); -- Variable para almacenar el resultado
+    CURSOR v_cursor IS -- Cursor para obtener las recetas con sus ingredientes y cantidades
+        SELECT R.NOMBRE_RECETA, I.NOMBRE AS NOMBRE_INGREDIENTE, IR.CANTIDAD
+        FROM RECETA R
+        INNER JOIN INGREDIENTE_RECETA IR ON R.ID_RECETA = IR.ID_RECETA
+        INNER JOIN INGREDIENTE I ON IR.ID_INGREDIENTE = I.ID_INGREDIENTE;
+    v_nombre_receta RECETA.NOMBRE_RECETA%TYPE; -- Variable para el nombre de la receta
+    v_nombre_ingrediente INGREDIENTE.NOMBRE%TYPE; -- Variable para el nombre del ingrediente
+    v_cantidad INGREDIENTE_RECETA.CANTIDAD%TYPE; -- Variable para la cantidad de ingrediente
+BEGIN
+    v_resultado := ''; -- Inicializa el resultado
+    OPEN v_cursor; -- Se abre el cursor
+    LOOP
+        FETCH v_cursor INTO v_nombre_receta, v_nombre_ingrediente, v_cantidad;
+        EXIT WHEN v_cursor%NOTFOUND; -- Se sale del bucle cuando no hay más datos
+        -- Se construye la cadena de resultado con la información de cada receta e ingrediente
+        v_resultado := v_resultado || 'Receta: ' || v_nombre_receta || ', Ingrediente: ' || v_nombre_ingrediente || ', Cantidad: ' || v_cantidad || CHR(10); -- CHR(10) es un salto de línea
+    END LOOP;
+    CLOSE v_cursor; -- Se cierra el cursor
+    RETURN v_resultado; -- Se devuelve la cadena de resultado
+END;
+/
+
+-- Comando para ejecutar la función y mostrar el resultado
+SELECT obtener_recetas_con_ingredientes1() FROM dual;
+
+-------------------------------------------------------
+/*
+En esta función se calcula las ganancias totales de todos los productos.
+y se retorna en un NUMBER
+*/
+
+CREATE OR REPLACE FUNCTION calcular_ganancias_totales_productos RETURN NUMBER AS
+    v_total_ganancias NUMBER := 0; -- Variable para almacenar las ganancias totales
+BEGIN
+    -- Se suma el total de ganancias de todos los productos
+    SELECT SUM(GANANCIA) INTO v_total_ganancias FROM COMPRA;
+    
+    RETURN v_total_ganancias; -- Se devuelve el total de ganancias
+END;
+/
+
+-- Comando para ejecutar la función y mostrar el resultado
+SELECT calcular_ganancias_totales_productos() FROM dual;
+
+--TRIGGERS
+
+--1.Después de insertar un nuevo cliente:
+CREATE OR REPLACE TRIGGER trg_despues_insertar_cliente
+AFTER INSERT ON CLIENTE
+FOR EACH ROW
+BEGIN
+    DBMS_OUTPUT.PUT_LINE('Se ha insertado un nuevo cliente con ID: ' || :new.ID_CLIENTE);
+    --Aquí se podrian agregar acciones adicionales, como enviar un correo electrónico de bienvenida.
+END;
+/
+
+--2.Después de actualizar el estado de una orden:
+CREATE OR REPLACE TRIGGER trg_despues_actualizar_estado_orden
+AFTER UPDATE OF ESTADO_ORDEN ON ORDEN
+FOR EACH ROW
+BEGIN
+    DBMS_OUTPUT.PUT_LINE('El estado de la orden con ID ' || :new.ID_ORDEN || ' ha sido actualizado a: ' || :new.ESTADO_ORDEN);
+END;
+/
+
+--3.Antes de eliminar un producto con cantidad mayor que cero:
+CREATE OR REPLACE TRIGGER trg_antes_eliminar_producto
+BEFORE DELETE ON PRODUCTO
+FOR EACH ROW
+BEGIN
+    IF :old.CANTIDAD > 0 THEN
+        RAISE_APPLICATION_ERROR(-20001, 'No se puede eliminar un producto con cantidad mayor que cero.');
+    END IF;
+END;
+/
+
+
+--4.Después de insertar un nuevo empleado:
+CREATE OR REPLACE TRIGGER trg_despues_insertar_empleado
+AFTER INSERT ON EMPLEADO
+FOR EACH ROW
+BEGIN
+    DBMS_OUTPUT.PUT_LINE('Se ha insertado un nuevo empleado con ID: ' || :new.ID_EMPLEADO);
+END;
+/
+
+
+--5.Después de actualizar el salario de un empleado:
+CREATE OR REPLACE TRIGGER trg_despues_actualizar_salario_empleado
+AFTER UPDATE OF SALARIO ON EMPLEADO
+FOR EACH ROW
+BEGIN
+    DBMS_OUTPUT.PUT_LINE('El salario del empleado ' || :new.NOMBRE || ' ' || :new.APELLIDO || ' ha sido actualizado a: ' || :new.SALARIO);
+END;
+/
+
+
+--6.Después de insertar un nuevo proveedor:
+CREATE OR REPLACE TRIGGER trg_despues_insertar_proveedor
+AFTER INSERT ON PROVEEDOR
+FOR EACH ROW
+BEGIN
+    DBMS_OUTPUT.PUT_LINE('Se ha insertado un nuevo proveedor con ID: ' || :new.ID_PROVEEDOR);
+END;
+/
+
+
+--7.Antes de eliminar un ingrediente de una receta:
+CREATE OR REPLACE TRIGGER trg_antes_eliminar_ingrediente_receta
+BEFORE DELETE ON INGREDIENTE_RECETA
+FOR EACH ROW
+DECLARE
+    v_cantidad_ingredientes NUMBER;
+BEGIN
+    -- Verificar la cantidad de ingredientes asociados a la receta antes de eliminar el actual
+    SELECT COUNT(*)
+    INTO v_cantidad_ingredientes
+    FROM INGREDIENTE_RECETA
+    WHERE ID_RECETA = :OLD.ID_RECETA;
+
+    IF v_cantidad_ingredientes = 1 THEN
+        RAISE_APPLICATION_ERROR(-20001, 'No se puede eliminar el último ingrediente asociado a la receta.');
+    END IF;
+    
+    -- Aquí se podrian agregar otras acciones adicionales si es necesario.
+END;
+/
+
+--INSERTS DE PRUEBAS
+-- Insertar datos en la tabla PROVEEDOR
+INSERT INTO PROVEEDOR VALUES (1, 'Proveedor Uno', '1234 Calle Panadería', 'contacto@proveedoruno.com', '1234567890');
+INSERT INTO PROVEEDOR VALUES (2, 'Proveedor Dos', '5678 Calle Repostería', 'contacto@proveedordos.com', '2345678901');
+INSERT INTO PROVEEDOR VALUES (3, 'Proveedor Tres', '9101 Calle Dulce', 'contacto@proveedortres.com', '3456789012');
+INSERT INTO PROVEEDOR VALUES (4, 'Proveedor Cuatro', '1123 Calle Pastel', 'contacto@proveedorcuatro.com', '4567890123');
+INSERT INTO PROVEEDOR VALUES (5, 'Proveedor Cinco', '1415 Calle Galleta', 'contacto@proveedorcinco.com', '5678901234');
+
+-- Insertar datos en la tabla DEPARTAMENTO
+INSERT INTO DEPARTAMENTO VALUES (1, 'Administración');
+INSERT INTO DEPARTAMENTO VALUES (2, 'Producción');
+INSERT INTO DEPARTAMENTO VALUES (3, 'Ventas');
+INSERT INTO DEPARTAMENTO VALUES (4, 'Logística');
+INSERT INTO DEPARTAMENTO VALUES (5, 'Marketing');
+
+-- Insertar datos en la tabla CLIENTE
+INSERT INTO CLIENTE (ID_CLIENTE, NOMBRE, APELLIDO, DIRECCION, CORREO, TELEFONO) VALUES (1, 'Ariel', 'Solis', 'Alajuela', 'ariel@correo.com', '1234567890');
+INSERT INTO CLIENTE VALUES (2, 'Ana', 'Gomez', '2345 Calle Ejemplo', 'ana.gomez@mail.com', '7890123456');
+INSERT INTO CLIENTE VALUES (3, 'Carlos', 'Díaz', '6789 Calle Modelo', 'carlos.diaz@mail.com', '8901234567');
+INSERT INTO CLIENTE VALUES (4, 'Luisa', 'Martinez', '1234 Calle Simulacro', 'luisa.martinez@mail.com', '9012345678');
+INSERT INTO CLIENTE VALUES (5, 'Juan', 'Pérez', '7890 Calle Prueba', 'juan.perez@mail.com', '6789012345');
+
+-- Insertar datos en la tabla PRODUCTO
+INSERT INTO PRODUCTO VALUES (1, 'Tarta de Manzana', 1500, 20, '31-DEC-2023');
+INSERT INTO PRODUCTO VALUES (2, 'Pastel de Chocolate', 2000, 15, '31-DEC-2023');
+INSERT INTO PRODUCTO VALUES (3, 'Galletas de Avena', 500, 50, '31-DEC-2023');
+INSERT INTO PRODUCTO VALUES (4, 'Pan de Plátano', 1200, 30, '31-DEC-2023');
+INSERT INTO PRODUCTO VALUES (5, 'Cheesecake', 1800, 25, '31-DEC-2023');
+
+-- Insertar datos en la tabla COMPRA
+INSERT INTO COMPRA VALUES (1, '20-APR-2024', 500, 1, 3);
+INSERT INTO COMPRA VALUES (2, '21-APR-2024', 450, 2, 4);
+INSERT INTO COMPRA VALUES (3, '22-APR-2024', 550, 3, 5);
+INSERT INTO COMPRA VALUES (4, '23-APR-2024', 600, 4, 1);
+INSERT INTO COMPRA VALUES (5, '24-APR-2024', 500, 5, 2);
+
+-- Insertar datos en la tabla INGREDIENTE
+INSERT INTO INGREDIENTE VALUES (1, 'Harina', 1000, 20, 1);
+INSERT INTO INGREDIENTE VALUES (2, 'Azúcar', 800, 15, 2);
+INSERT INTO INGREDIENTE VALUES (3, 'Mantequilla', 500, 30, 3);
+INSERT INTO INGREDIENTE VALUES (4, 'Huevos', 1200, 10, 4);
+INSERT INTO INGREDIENTE VALUES (5, 'Chocolate', 600, 25, 5);
+
+-- Insertar datos en la tabla RECETA
+INSERT INTO RECETA VALUES (1, 'Tarta de Manzana');
+INSERT INTO RECETA VALUES (2, 'Pastel de Chocolate');
+INSERT INTO RECETA VALUES (3, 'Galletas de Avena');
+INSERT INTO RECETA VALUES (4, 'Pan de Plátano');
+INSERT INTO RECETA VALUES (5, 'Cheesecake');
+
+-- Insertar datos en la tabla INGREDIENTE_RECETA
+INSERT INTO INGREDIENTE_RECETA VALUES (1, 1, 500);
+INSERT INTO INGREDIENTE_RECETA VALUES (1, 2, 200);
+INSERT INTO INGREDIENTE_RECETA VALUES (2, 3, 300);
+INSERT INTO INGREDIENTE_RECETA VALUES (2, 4, 100);
+INSERT INTO INGREDIENTE_RECETA VALUES (3, 5, 250);
+
+-- Insertar datos en la tabla ORDEN
+INSERT INTO ORDEN VALUES (1, '20-APR-2024', 'Completado', 1, 1);
+INSERT INTO ORDEN VALUES (2, '21-APR-2024', 'En Preparación', 2, 2);
+INSERT INTO ORDEN VALUES (3, '22-APR-2024', 'En Espera', 3, 3);
+INSERT INTO ORDEN VALUES (4, '23-APR-2024', 'Enviado', 4, 4);
+INSERT INTO ORDEN VALUES (5, '24-APR-2024', 'Cancelado', 5, 5);
+
+-- Insertar datos en la tabla EMPLEADO
+INSERT INTO EMPLEADO VALUES (1, 'Pedro', 'Ramírez', 'Gerente', 5000, '01-JAN-2022', 1);
+INSERT INTO EMPLEADO VALUES (2, 'Marta', 'Sánchez', 'Repostera', 3000, '01-FEB-2022', 2);
+INSERT INTO EMPLEADO VALUES (3, 'Jorge', 'Torres', 'Vendedor', 2500, '01-MAR-2022', 3);
+INSERT INTO EMPLEADO VALUES (4, 'Lucía', 'Fernández', 'Logística', 2800, '01-APR-2022', 4);
+INSERT INTO EMPLEADO VALUES (5, 'Tomás', 'Ruiz', 'Marketing', 3200, '01-MAY-2022', 5);
+
+COMMIT;
 
 DROP TABLE COMPRA;
 DROP TABLE PRODUCTO;
