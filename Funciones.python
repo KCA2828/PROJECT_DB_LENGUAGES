@@ -1,0 +1,407 @@
+def calcular_ganancias_totales_productos():
+    connection = conectar_db()
+    if connection is not None:
+        try:
+            cursor = connection.cursor()
+            result = cursor.callfunc("calcular_ganancias_totales_productos", cx_Oracle.NUMBER)
+            messagebox.showinfo("Total Ganancias", f"Las ganancias totales son: {result}")
+        except Exception as ex:
+            messagebox.showerror("Error", f"No se pudo calcular las ganancias totales: {ex}")
+        finally:
+            cursor.close()
+            connection.close()
+
+def calcular_total_ingredientes_receta1():
+    connection = conectar_db()
+    if connection is not None:
+        try:
+            cursor = connection.cursor()
+            # Llamada a la función en la base de datos
+            cursor.execute("BEGIN :result := calcular_total_ingredientes_receta1(); END;", result=cx_Oracle.NUMBER)
+            result = cursor.var(cx_Oracle.NUMBER)
+            cursor.execute("BEGIN :result := calcular_total_ingredientes_receta1(); END;", result=result)
+            total_ingredientes = result.getvalue()
+            messagebox.showinfo("Total Ingredientes", f"El total de ingredientes para la receta es: {total_ingredientes}")
+        except Exception as ex:
+            messagebox.showerror("Error", f"No se pudo calcular el total de ingredientes para la receta: {ex}")
+        finally:
+            cursor.close()
+            connection.close()
+
+def calcular_total_ventas_mes_anio1():
+    connection = conectar_db()
+    if connection is not None:
+        try:
+            cursor = connection.cursor()
+            # Llamada a la función en la base de datos
+            mes = 1  # Aquí deberías establecer el mes para el cual deseas calcular el total de ventas
+            anio = 2024  # Aquí deberías establecer el año para el cual deseas calcular el total de ventas
+            result = cursor.callfunc("calcular_total_ventas_mes_anio1", cx_Oracle.NUMBER, (mes, anio))
+            messagebox.showinfo("Total Ventas", f"El total de ventas para el mes {mes} del año {anio} es: {result}")
+        except Exception as ex:
+            messagebox.showerror("Error", f"No se pudo calcular el total de ventas para el mes {mes} del año {anio}: {ex}")
+        finally:
+            cursor.close()
+            connection.close()
+
+def CONSULTAR_INGREDIENTES(nombre_ingrediente):
+    connection = conectar_db()
+    if connection is not None:
+        try:
+            cursor = connection.cursor()
+            # Llamada a la función en la base de datos
+            result = cursor.callfunc("CONSULTAR_INGREDIENTES", cx_Oracle.STRING, (nombre_ingrediente,))
+            messagebox.showinfo("Consulta de Ingredientes", result)
+        except Exception as ex:
+            messagebox.showerror("Error", f"No se pudo consultar los ingredientes: {ex}")
+        finally:
+            cursor.close()
+            connection.close()
+
+def CONTAR_VENTAS_POR_PRODUCTO(nombre_producto):
+    connection = conectar_db()
+    if connection is not None:
+        try:
+            cursor = connection.cursor()
+            cursor.execute("BEGIN :result := CONTAR_VENTAS_POR_PRODUCTO(:nombre_producto); END;",
+                           result=cx_Oracle.STRING, nombre_producto=nombre_producto)
+            result = cursor.var(cx_Oracle.STRING)
+            cursor.execute("BEGIN :result := CONTAR_VENTAS_POR_PRODUCTO(:nombre_producto); END;",
+                           result=result, nombre_producto=nombre_producto)
+            result_value = result.getvalue()
+            messagebox.showinfo("Ventas por Producto", f"El total de ventas para el producto '{nombre_producto}' es: {result_value}")
+        except Exception as ex:
+            messagebox.showerror("Error", f"No se pudo obtener el total de ventas por producto: {ex}")
+        finally:
+            cursor.close()
+            connection.close()
+
+def LISTAR_PRODUCTOS_BAJO_STOCK():
+    connection = conectar_db()
+    if connection is not None:
+        try:
+            cursor = connection.cursor()
+
+            # Llamada a la función LISTAR_PRODUCTOS_BAJO_STOCK() en la base de datos
+            cursor.execute("BEGIN :result := LISTAR_PRODUCTOS_BAJO_STOCK(); END;",
+                           result=cx_Oracle.STRING)
+
+            # Recuperar el resultado de la función
+            result = cursor.var(cx_Oracle.STRING)
+            cursor.execute("BEGIN :result := LISTAR_PRODUCTOS_BAJO_STOCK(); END;",
+                           result=result)
+
+            # Mostrar el resultado en un cuadro de diálogo
+            result_value = result.getvalue()
+            messagebox.showinfo("Productos Bajo Stock", result_value)
+        except Exception as ex:
+            messagebox.showerror("Error", f"No se pudo obtener la lista de productos bajo stock: {ex}")
+        finally:
+            cursor.close()
+            connection.close()
+
+def MOSTRAR_EMPLEADOS_POR_DEPARTAMENTO():
+    connection = conectar_db()
+    if connection is not None:
+        try:
+            cursor = connection.cursor()
+
+            # Llamada a la función MOSTRAR_EMPLEADOS_POR_DEPARTAMENTO() en la base de datos
+            cursor.execute("SELECT * FROM MOSTRAR_EMPLEADOS_POR_DEPARTAMENTO")
+
+            # Recuperar los resultados
+            results = cursor.fetchall()
+
+            # Crear una cadena para mostrar la información
+            info_str = "Empleados por Departamento:\n"
+            for row in results:
+                info_str += f"ID: {row[0]}, Nombre: {row[1]}, Departamento: {row[2]}\n"
+
+            # Mostrar la información en un cuadro de diálogo
+            messagebox.showinfo("Empleados por Departamento", info_str)
+        except Exception as ex:
+            messagebox.showerror("Error", f"No se pudo obtener la lista de empleados por departamento: {ex}")
+        finally:
+            cursor.close()
+            connection.close()
+
+def MOSTRAR_ORDEN_POR_CLIENTE():
+    connection = conectar_db()
+    if connection is not None:
+        try:
+            cursor = connection.cursor()
+
+            # Llamada a la función MOSTRAR_ORDEN_POR_CLIENTE() en la base de datos
+            cursor.execute("SELECT * FROM MOSTRAR_ORDEN_POR_CLIENTE")
+
+            # Recuperar los resultados
+            results = cursor.fetchall()
+
+            # Crear una cadena para mostrar la información
+            info_str = "Órdenes por Cliente:\n"
+            for row in results:
+                info_str += f"ID de Orden: {row[0]}, Cliente: {row[1]}, Producto: {row[2]}, Cantidad: {row[3]}\n"
+
+            # Mostrar la información en un cuadro de diálogo
+            messagebox.showinfo("Órdenes por Cliente", info_str)
+        except Exception as ex:
+            messagebox.showerror("Error", f"No se pudo obtener la lista de órdenes por cliente: {ex}")
+        finally:
+            cursor.close()
+            connection.close()
+
+def NUMERO_TOTAL_COMPRAS_POR_CLIENTE():
+    connection = conectar_db()
+    if connection is not None:
+        try:
+            cursor = connection.cursor()
+            # Ejecutar la consulta SQL para contar el número de compras por cliente
+            cursor.execute("""
+                SELECT cliente_id, COUNT(*) AS total_compras
+                FROM Compras
+                GROUP BY cliente_id
+            """)
+            # Obtener los resultados de la consulta
+            resultados = cursor.fetchall()
+            # Mostrar los resultados
+            if resultados:
+                info_compras = "\n".join(f"Cliente {cliente_id}: {total_compras} compras" for cliente_id, total_compras in resultados)
+                messagebox.showinfo("Número Total de Compras por Cliente", info_compras)
+            else:
+                messagebox.showinfo("Número Total de Compras por Cliente", "No hay datos disponibles.")
+        except Exception as ex:
+            messagebox.showerror("Error", f"No se pudo obtener el número total de compras por cliente: {ex}")
+        finally:
+            cursor.close()
+            connection.close()  
+
+def obtener_clientes_mas_3_compras1():
+    connection = conectar_db()
+    if connection is not None:
+        try:
+            cursor = connection.cursor()
+            # Ejecutar la consulta SQL para obtener los clientes con más de tres compras
+            cursor.execute("""
+                SELECT cliente_id, COUNT(*) AS total_compras
+                FROM Compras
+                GROUP BY cliente_id
+                HAVING COUNT(*) > 3
+            """)
+            # Obtener los resultados de la consulta
+            resultados = cursor.fetchall()
+            # Mostrar los resultados
+            if resultados:
+                info_clientes = "\n".join(f"Cliente {cliente_id}: {total_compras} compras" for cliente_id, total_compras in resultados)
+                messagebox.showinfo("Clientes con Más de 3 Compras", info_clientes)
+            else:
+                messagebox.showinfo("Clientes con Más de 3 Compras", "No hay clientes que hayan realizado más de 3 compras.")
+        except Exception as ex:
+            messagebox.showerror("Error", f"No se pudieron obtener los clientes con más de 3 compras: {ex}")
+        finally:
+            cursor.close()
+            connection.close()
+
+from datetime import datetime
+
+def OBTENER_COMPRAS_POR_FECHA(fecha):
+    connection = conectar_db()
+    if connection is not None:
+        try:
+            cursor = connection.cursor()
+            # Convertir la fecha a formato de base de datos
+            fecha_db = fecha.strftime('%Y-%m-%d')
+            # Ejecutar la consulta SQL para obtener las compras por fecha
+            cursor.execute("""
+                SELECT *
+                FROM Compras
+                WHERE fecha_compra = TO_DATE(:fecha, 'YYYY-MM-DD')
+            """, {'fecha': fecha_db})
+            # Obtener los resultados de la consulta
+            resultados = cursor.fetchall()
+            # Mostrar los resultados
+            if resultados:
+                info_compras = "\n".join(str(compra) for compra in resultados)
+                messagebox.showinfo("Compras del Día", info_compras)
+            else:
+                messagebox.showinfo("Compras del Día", "No hay compras registradas para esta fecha.")
+        except Exception as ex:
+            messagebox.showerror("Error", f"No se pudieron obtener las compras para la fecha especificada: {ex}")
+        finally:
+            cursor.close()
+            connection.close()
+
+
+def conectar_db():
+    try:
+        cx_Oracle.init_oracle_client(lib_dir=r"C:\instantclient\instantclient_19_22",
+                                     config_dir=r"C:\instantclient\instantclient_19_22\network\admin")
+        print("Oracle Client inicializado.")
+    except Exception as ex:
+        messagebox.showerror("Error al inicializar el cliente Oracle", str(ex))
+
+def OBTENER_EMPLEADO_POR_NOMBRE(nombre):
+    connection = conectar_db()
+    if connection is not None:
+        try:
+            cursor = connection.cursor()
+            # Ejecutar la consulta SQL para obtener el empleado por nombre
+            cursor.execute("""
+                SELECT *
+                FROM Empleados
+                WHERE nombre = :nombre
+            """, {'nombre': nombre})
+            # Obtener el resultado de la consulta
+            resultado = cursor.fetchone()
+            # Mostrar el resultado
+            if resultado:
+                messagebox.showinfo("Información del Empleado", str(resultado))
+            else:
+                messagebox.showinfo("Información del Empleado", "No se encontró ningún empleado con ese nombre.")
+        except Exception as ex:
+            messagebox.showerror("Error", f"No se pudo obtener la información del empleado: {ex}")
+        finally:
+            cursor.close()
+            connection.close()
+
+
+def obtener_ordenes_pendientes():
+    connection = conectar_db()
+    if connection is not None:
+        try:
+            cursor = connection.cursor()
+            # Ejecutar la consulta SQL para obtener las órdenes pendientes
+            cursor.execute("""
+                SELECT *
+                FROM Ordenes
+                WHERE estado = 'pendiente'
+            """)
+            # Obtener el resultado de la consulta
+            resultados = cursor.fetchall()
+            # Mostrar el resultado
+            if resultados:
+                messagebox.showinfo("Órdenes Pendientes", "\n".join(map(str, resultados)))
+            else:
+                messagebox.showinfo("Órdenes Pendientes", "No hay órdenes pendientes en este momento.")
+        except Exception as ex:
+            messagebox.showerror("Error", f"No se pudo obtener las órdenes pendientes: {ex}")
+        finally:
+            cursor.close()
+            connection.close()
+
+
+
+def obtener_productos_por_proveedor(proveedor_id):
+    connection = conectar_db()
+    if connection is not None:
+        try:
+            cursor = connection.cursor()
+            # Ejecutar la consulta SQL para obtener los productos por proveedor
+            cursor.execute("""
+                SELECT *
+                FROM Productos
+                WHERE proveedor_id = :proveedor_id
+            """, {'proveedor_id': proveedor_id})
+            # Obtener el resultado de la consulta
+            resultados = cursor.fetchall()
+            # Mostrar el resultado
+            if resultados:
+                messagebox.showinfo("Productos por Proveedor", "\n".join(map(str, resultados)))
+            else:
+                messagebox.showinfo("Productos por Proveedor", "No hay productos para este proveedor.")
+        except Exception as ex:
+            messagebox.showerror("Error", f"No se pudo obtener los productos por proveedor: {ex}")
+        finally:
+            cursor.close()
+            connection.close()
+
+def conectar_db():
+    try:
+        cx_Oracle.init_oracle_client(lib_dir=r"C:\instantclient\instantclient_19_22",
+                                     config_dir=r"C:\instantclient\instantclient_19_22\network\admin")
+        print("Oracle Client inicializado.")
+    except Exception as ex:
+        messagebox.showerror("Error al inicializar el cliente Oracle", str(ex))
+
+def obtener_recetas_con_ingredientes():
+    connection = conectar_db()
+    if connection is not None:
+        try:
+            cursor = connection.cursor()
+            # Ejecutar la consulta SQL para obtener las recetas con sus ingredientes
+            cursor.execute("""
+                SELECT r.nombre AS Receta, i.nombre AS Ingrediente, ri.cantidad AS Cantidad
+                FROM Recetas r
+                JOIN Recetas_Ingredientes ri ON r.id = ri.receta_id
+                JOIN Ingredientes i ON ri.ingrediente_id = i.id
+            """)
+            # Obtener el resultado de la consulta
+            resultados = cursor.fetchall()
+            # Mostrar el resultado
+            if resultados:
+                messagebox.showinfo("Recetas con Ingredientes", "\n".join(map(str, resultados)))
+            else:
+                messagebox.showinfo("Recetas con Ingredientes", "No hay recetas con ingredientes disponibles.")
+        except Exception as ex:
+            messagebox.showerror("Error", f"No se pudo obtener las recetas con ingredientes: {ex}")
+        finally:
+            cursor.close()
+            connection.close()
+
+
+def main_window():
+    root = tk.Tk()
+    root.title("Funciones")
+    root.geometry("1280x720")
+
+    # Agrega botones que llamen a las funciones correspondientes al hacer clic
+    btn_calcular_ganancias_totales_productos = tk.Button(root, text="calcular ganancias totales de los productos", command=calcular_ganancias_totales_productos)
+    btn_calcular_ganancias_totales_productos.pack(pady=5)
+
+    btn_calcular_total_ingredientes_receta1 = tk.Button(root, text="Calcular Total Ingredientes Por Receta", command=calcular_total_ingredientes_receta1)
+    btn_calcular_total_ingredientes_receta1.pack(pady=5)
+    
+    btn_calcular_total_ventas_mes_anio1 = tk.Button(root, text="calcular total ventas por mes y anio", command=calcular_total_ventas_mes_anio1)
+    btn_calcular_total_ventas_mes_anio1.pack(pady=5)
+    
+    btn_CONSULTAR_INGREDIENTES = tk.Button(root, text="CONSULTAR INGREDIENTES", command=CONSULTAR_INGREDIENTES)
+    btn_CONSULTAR_INGREDIENTES.pack(pady=5)
+    
+    btn_CONTAR_VENTAS_POR_PRODUCTO = tk.Button(root, text="CONTAR VENTAS POR PRODUCTO", command=CONTAR_VENTAS_POR_PRODUCTO)
+    btn_CONTAR_VENTAS_POR_PRODUCTO.pack(pady=5)
+    
+    btn_LISTAR_PRODUCTOS_BAJO_STOCK = tk.Button(root, text="LISTAR PRODUCTOS BAJO STOCK", command=LISTAR_PRODUCTOS_BAJO_STOCK)
+    btn_LISTAR_PRODUCTOS_BAJO_STOCK.pack(pady=5)
+    
+    btn_MOSTRAR_EMPLEADOS_POR_DEPARTAMENTO = tk.Button(root, text="MOSTRAR EMPLEADOS POR DEPARTAMENTO", command=MOSTRAR_EMPLEADOS_POR_DEPARTAMENTO)
+    btn_MOSTRAR_EMPLEADOS_POR_DEPARTAMENTO.pack(pady=5)
+    
+    btn_MOSTRAR_ORDEN_POR_CLIENTE = tk.Button(root, text="MOSTRAR ORDEN POR CLIENTE", command=MOSTRAR_ORDEN_POR_CLIENTE)
+    btn_MOSTRAR_ORDEN_POR_CLIENTE.pack(pady=5)
+    
+    btn_NUMERO_TOTAL_COMPRAS_POR_CLIENTE = tk.Button(root, text="NUMERO TOTAL COMPRAS POR CLIENTE", command=NUMERO_TOTAL_COMPRAS_POR_CLIENTE)
+    btn_NUMERO_TOTAL_COMPRAS_POR_CLIENTE.pack(pady=5)
+    
+    btn_obtener_clientes_mas_3_compras1 = tk.Button(root, text="obtener clientes con mas de 3 compras", command=obtener_clientes_mas_3_compras1)
+    btn_obtener_clientes_mas_3_compras1.pack(pady=5)
+    
+    btn_OBTENER_COMPRAS_POR_FECHA = tk.Button(root, text="OBTENER COMPRAS POR FECHA", command=OBTENER_COMPRAS_POR_FECHA)
+    btn_OBTENER_COMPRAS_POR_FECHA.pack(pady=5)
+    
+    btn_OBTENER_EMPLEADO_POR_NOMBRE = tk.Button(root, text="OBTENER EMPLEADO POR NOMBRE", command=OBTENER_EMPLEADO_POR_NOMBRE)
+    btn_OBTENER_EMPLEADO_POR_NOMBRE.pack(pady=5)
+    
+    btn_obtener_ordenes_pendientes1 = tk.Button(root, text="obtener ordenes pendientes", command=obtener_ordenes_pendientes1)
+    btn_obtener_ordenes_pendientes1.pack(pady=5)
+    
+    btn_obtener_productos_por_proveedor = tk.Button(root, text="obtener productos por proveedor", command=obtener_productos_por_proveedor)
+    btn_obtener_productos_por_proveedor.pack(pady=5)
+    
+    btn_obtener_recetas_con_ingredientes1 = tk.Button(root, text="obtener recetas con ingredientes", command=obtener_recetas_con_ingredientes1)
+    btn_obtener_recetas_con_ingredientes1.pack(pady=5)
+
+    # Agrega más botones para otras funciones según sea necesario
+
+    root.mainloop()
+
+if __name__ == "__main__":
+    main_window()
