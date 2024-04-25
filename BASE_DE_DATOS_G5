@@ -94,9 +94,6 @@ CREATE TABLE EMPLEADO (
     CONSTRAINT FK_EMPLEADO_DEPARTAMENTO FOREIGN KEY (ID_DEPARTAMENTO) REFERENCES DEPARTAMENTO(ID_DEPARTAMENTO)
 );
 
-
-
-
 -- Procedimientos almacenados y paquetes
 
 -- TABLA PROVEEDORES
@@ -822,7 +819,7 @@ JOIN RECETA R ON IR.ID_RECETA = R.ID_RECETA;
 
 
 -- Funciones
-create or replace NONEDITIONABLE FUNCTION CONSULTAR_INGREDIENTES(
+create or replace FUNCTION CONSULTAR_INGREDIENTES(
     p_nombre_ingrediente IN VARCHAR2
 ) RETURN VARCHAR2
 IS
@@ -859,8 +856,9 @@ EXCEPTION
         END IF;
         RETURN 'Ocurrió un error al procesar la solicitud: ' || SQLERRM;
 END CONSULTAR_INGREDIENTES;
+/
 
-create or replace NONEDITIONABLE FUNCTION CONTAR_VENTAS_POR_PRODUCTO (
+create or replace FUNCTION CONTAR_VENTAS_POR_PRODUCTO (
     nombre_producto IN VARCHAR2
 ) RETURN VARCHAR2
 AS
@@ -900,8 +898,9 @@ EXCEPTION
         END IF;
         RETURN 'Ocurrió un error al procesar la solicitud: ' || SQLERRM;
 END CONTAR_VENTAS_POR_PRODUCTO;
+/
 
-create or replace NONEDITIONABLE FUNCTION LISTAR_PRODUCTOS_BAJO_STOCK RETURN VARCHAR2
+create or replace FUNCTION LISTAR_PRODUCTOS_BAJO_STOCK RETURN VARCHAR2
 AS
     v_resultado VARCHAR2(4000) := '';
     CURSOR c_productos IS
@@ -926,8 +925,9 @@ BEGIN
 
     RETURN v_resultado;
 END LISTAR_PRODUCTOS_BAJO_STOCK;
+/
 
-create or replace NONEDITIONABLE FUNCTION MOSTRAR_EMPLEADOS_POR_DEPARTAMENTO RETURN VARCHAR2
+create or replace FUNCTION MOSTRAR_EMPLEADOS_POR_DEPARTAMENTO RETURN VARCHAR2
 AS
     v_resultado VARCHAR2(4000) := ''; -- Inicializa la variable para evitar valores NULL
     CURSOR c_deptos IS
@@ -963,8 +963,9 @@ EXCEPTION
         END IF;
         RETURN 'Ocurrió un error al procesar la solicitud: ' || SQLERRM;
 END MOSTRAR_EMPLEADOS_POR_DEPARTAMENTO;
+/
 
-create or replace NONEDITIONABLE FUNCTION MOSTRAR_ORDEN_POR_CLIENTE (
+create or replace FUNCTION MOSTRAR_ORDEN_POR_CLIENTE (
     nombre_cliente IN VARCHAR2
 ) RETURN VARCHAR2
 AS
@@ -1013,8 +1014,9 @@ EXCEPTION
         END IF;
         RETURN 'Ocurrió un error al procesar la solicitud: ' || SQLERRM;
 END MOSTRAR_ORDEN_POR_CLIENTE;
+/
 
-create or replace NONEDITIONABLE FUNCTION NUMERO_TOTAL_COMPRAS_POR_CLIENTE (
+create or replace FUNCTION NUMERO_TOTAL_COMPRAS_POR_CLIENTE (
     nombre_cliente IN VARCHAR2
 ) RETURN VARCHAR2
 AS
@@ -1041,8 +1043,9 @@ EXCEPTION
     WHEN OTHERS THEN
         RETURN 'Ocurrió un error al procesar la solicitud: ' || SQLERRM;
 END NUMERO_TOTAL_COMPRAS_POR_CLIENTE;
+/
 
-create or replace NONEDITIONABLE FUNCTION OBTENER_COMPRAS_POR_FECHA (
+create or replace FUNCTION OBTENER_COMPRAS_POR_FECHA (
     fecha_inicio IN DATE,
     fecha_fin IN DATE
 ) RETURN VARCHAR2
@@ -1086,8 +1089,9 @@ EXCEPTION
         END IF;
         RETURN 'Ocurrió un error al procesar la solicitud: ' || SQLERRM;
 END OBTENER_COMPRAS_POR_FECHA;
+/
 
-create or replace NONEDITIONABLE FUNCTION OBTENER_EMPLEADO_POR_NOMBRE (
+create or replace FUNCTION OBTENER_EMPLEADO_POR_NOMBRE (
     nombre_empleado IN VARCHAR2
 ) RETURN VARCHAR2
 AS
@@ -1133,6 +1137,7 @@ EXCEPTION
         END IF;
         RETURN 'Ocurrió un error al procesar la solicitud: ' || SQLERRM;
 END OBTENER_EMPLEADO_POR_NOMBRE;
+/
 
 /*
 En esta función se devuelve una cadena de caracteres que contiene la lista de proveedores y la cantidad de productos que suministran cada uno.
@@ -1225,7 +1230,7 @@ CREATE OR REPLACE FUNCTION obtener_ordenes_pendientes1 RETURN VARCHAR2 AS
     CURSOR v_cursor IS -- Cursor para recuperar los IDs de clientes con órdenes pendientes
         SELECT ID_CLIENTE
         FROM ORDEN
-        WHERE ESTADO_ORDEN = 'Pendiente';
+        WHERE ESTADO_ORDEN = 'En Espera';
     v_id_cliente ORDEN.ID_CLIENTE%TYPE;
 BEGIN
     v_resultado := ''; -- Inicializa el resultado
@@ -1319,86 +1324,117 @@ END;
 SELECT calcular_ganancias_totales_productos() FROM dual;
 
 --TRIGGERS
+CREATE TABLE AUDIT_CLIENTE (
+    ID_CLIENTE       NUMBER,
+    NOMBRE           VARCHAR2(50),
+    OPERATION_TYPE   VARCHAR2(10),
+    OPERATION_DATE   TIMESTAMP DEFAULT SYSTIMESTAMP,
+    USERNAME         VARCHAR2(100)
+);
 
---1.Después de insertar un nuevo cliente:
-CREATE OR REPLACE TRIGGER trg_despues_insertar_cliente
-AFTER INSERT ON CLIENTE
+CREATE TABLE AUDIT_EMPLEADO (
+    ID_EMPLEADO      NUMBER,
+    NOMBRE           VARCHAR2(50),
+    OPERATION_TYPE   VARCHAR2(10),
+    OPERATION_DATE   TIMESTAMP DEFAULT SYSTIMESTAMP,
+    USERNAME         VARCHAR2(100)
+);
+
+CREATE TABLE AUDIT_PROVEEDOR (
+    ID_PROVEEDOR     NUMBER,
+    NOMBRE           VARCHAR2(50),
+    OPERATION_TYPE   VARCHAR2(10),
+    OPERATION_DATE   TIMESTAMP DEFAULT SYSTIMESTAMP,
+    USERNAME         VARCHAR2(100)
+);
+
+CREATE TABLE AUDIT_PRODUCTO (
+    ID_PRODUCTO      NUMBER,
+    NOMBRE           VARCHAR2(50),
+    OPERATION_TYPE   VARCHAR2(10),
+    OPERATION_DATE   TIMESTAMP DEFAULT SYSTIMESTAMP,
+    USERNAME         VARCHAR2(100)
+);
+
+CREATE OR REPLACE TRIGGER trg_despues_actualizar_cliente
+AFTER UPDATE ON CLIENTE
 FOR EACH ROW
 BEGIN
-    DBMS_OUTPUT.PUT_LINE('Se ha insertado un nuevo cliente con ID: ' || :new.ID_CLIENTE);
-    --Aquí se podrian agregar acciones adicionales, como enviar un correo electrónico de bienvenida.
+    INSERT INTO AUDIT_CLIENTE (ID_CLIENTE, NOMBRE, OPERATION_TYPE, USERNAME, OPERATION_DATE)
+    VALUES (:new.ID_CLIENTE, :new.NOMBRE, 'UPDATE', USER, SYSTIMESTAMP);
 END;
 /
 
---2.Después de actualizar el estado de una orden:
-CREATE OR REPLACE TRIGGER trg_despues_actualizar_estado_orden
-AFTER UPDATE OF ESTADO_ORDEN ON ORDEN
+CREATE OR REPLACE TRIGGER trg_despues_actualizar_empleado
+AFTER UPDATE ON EMPLEADO
 FOR EACH ROW
 BEGIN
-    DBMS_OUTPUT.PUT_LINE('El estado de la orden con ID ' || :new.ID_ORDEN || ' ha sido actualizado a: ' || :new.ESTADO_ORDEN);
+    INSERT INTO AUDIT_EMPLEADO (ID_EMPLEADO, NOMBRE, OPERATION_TYPE, USERNAME, OPERATION_DATE)
+    VALUES (:new.ID_EMPLEADO, :new.NOMBRE, 'UPDATE', USER, SYSTIMESTAMP);
 END;
 /
 
---3.Antes de eliminar un producto con cantidad mayor que cero:
-CREATE OR REPLACE TRIGGER trg_antes_eliminar_producto
+CREATE OR REPLACE TRIGGER trg_despues_actualizar_proveedor
+AFTER UPDATE ON PROVEEDOR
+FOR EACH ROW
+BEGIN
+    INSERT INTO AUDIT_PROVEEDOR (ID_PROVEEDOR, NOMBRE, OPERATION_TYPE, USERNAME, OPERATION_DATE)
+    VALUES (:new.ID_PROVEEDOR, :new.NOMBRE, 'UPDATE', USER, SYSTIMESTAMP);
+END;
+/
+
+CREATE OR REPLACE TRIGGER trg_despues_actualizar_producto
+AFTER UPDATE ON PRODUCTO
+FOR EACH ROW
+BEGIN
+    INSERT INTO AUDIT_PRODUCTO (ID_PRODUCTO, NOMBRE, OPERATION_TYPE, USERNAME, OPERATION_DATE)
+    VALUES (:new.ID_PRODUCTO, :new.NOMBRE, 'UPDATE', USER, SYSTIMESTAMP);
+END;
+/
+
+CREATE OR REPLACE TRIGGER trg_antes_eliminar_cliente
+BEFORE DELETE ON CLIENTE
+FOR EACH ROW
+BEGIN
+    INSERT INTO AUDIT_CLIENTE (ID_CLIENTE, NOMBRE, OPERATION_TYPE, USERNAME, OPERATION_DATE)
+    VALUES (:old.ID_CLIENTE, :old.NOMBRE, 'DELETE', USER, SYSTIMESTAMP);
+END;
+/
+
+CREATE OR REPLACE TRIGGER trg_antes_eliminar_empleado
+BEFORE DELETE ON EMPLEADO
+FOR EACH ROW
+BEGIN
+    INSERT INTO AUDIT_EMPLEADO (ID_EMPLEADO, NOMBRE, OPERATION_TYPE, USERNAME, OPERATION_DATE)
+    VALUES (:old.ID_EMPLEADO, :old.NOMBRE, 'DELETE', USER, SYSTIMESTAMP);
+END;
+/
+
+CREATE OR REPLACE TRIGGER trg_antes_eliminar_proveedor
+BEFORE DELETE ON PROVEEDOR
+FOR EACH ROW
+BEGIN
+    INSERT INTO AUDIT_PROVEEDOR (ID_PROVEEDOR, NOMBRE, OPERATION_TYPE, USERNAME, OPERATION_DATE)
+    VALUES (:old.ID_PROVEEDOR, :old.NOMBRE, 'DELETE', USER, SYSTIMESTAMP);
+END;
+/
+
+CREATE OR REPLACE TRIGGER trg_antes_eliminar_producto_registro_en_tabla
+BEFORE DELETE ON PRODUCTO
+FOR EACH ROW
+BEGIN
+    INSERT INTO AUDIT_PRODUCTO (ID_PRODUCTO, NOMBRE, OPERATION_TYPE, USERNAME, OPERATION_DATE)
+    VALUES (:old.ID_PRODUCTO, :old.NOMBRE, 'DELETE', USER, SYSTIMESTAMP);
+END;
+/
+
+create or replace NONEDITIONABLE TRIGGER trg_antes_eliminar_producto
 BEFORE DELETE ON PRODUCTO
 FOR EACH ROW
 BEGIN
     IF :old.CANTIDAD > 0 THEN
         RAISE_APPLICATION_ERROR(-20001, 'No se puede eliminar un producto con cantidad mayor que cero.');
     END IF;
-END;
-/
-
-
---4.Después de insertar un nuevo empleado:
-CREATE OR REPLACE TRIGGER trg_despues_insertar_empleado
-AFTER INSERT ON EMPLEADO
-FOR EACH ROW
-BEGIN
-    DBMS_OUTPUT.PUT_LINE('Se ha insertado un nuevo empleado con ID: ' || :new.ID_EMPLEADO);
-END;
-/
-
-
---5.Después de actualizar el salario de un empleado:
-CREATE OR REPLACE TRIGGER trg_despues_actualizar_salario_empleado
-AFTER UPDATE OF SALARIO ON EMPLEADO
-FOR EACH ROW
-BEGIN
-    DBMS_OUTPUT.PUT_LINE('El salario del empleado ' || :new.NOMBRE || ' ' || :new.APELLIDO || ' ha sido actualizado a: ' || :new.SALARIO);
-END;
-/
-
-
---6.Después de insertar un nuevo proveedor:
-CREATE OR REPLACE TRIGGER trg_despues_insertar_proveedor
-AFTER INSERT ON PROVEEDOR
-FOR EACH ROW
-BEGIN
-    DBMS_OUTPUT.PUT_LINE('Se ha insertado un nuevo proveedor con ID: ' || :new.ID_PROVEEDOR);
-END;
-/
-
-
---7.Antes de eliminar un ingrediente de una receta:
-CREATE OR REPLACE TRIGGER trg_antes_eliminar_ingrediente_receta
-BEFORE DELETE ON INGREDIENTE_RECETA
-FOR EACH ROW
-DECLARE
-    v_cantidad_ingredientes NUMBER;
-BEGIN
-    -- Verificar la cantidad de ingredientes asociados a la receta antes de eliminar el actual
-    SELECT COUNT(*)
-    INTO v_cantidad_ingredientes
-    FROM INGREDIENTE_RECETA
-    WHERE ID_RECETA = :OLD.ID_RECETA;
-
-    IF v_cantidad_ingredientes = 1 THEN
-        RAISE_APPLICATION_ERROR(-20001, 'No se puede eliminar el último ingrediente asociado a la receta.');
-    END IF;
-    
-    -- Aquí se podrian agregar otras acciones adicionales si es necesario.
 END;
 /
 
